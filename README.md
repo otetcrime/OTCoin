@@ -1,177 +1,166 @@
 # 🪙 OTCoin (OTC)
 
-> **One Transaction. All Chains.**
+<div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
-[![Blockchain](https://img.shields.io/badge/Consensus-Proof%20of%20Work-orange.svg)]()
-[![Supply](https://img.shields.io/badge/Total%20Supply-51%2C000%2C000%20OTC-gold.svg)]()
+![OTCoin](https://img.shields.io/badge/OTCoin-OTC-FFD166?style=for-the-badge&logo=bitcoin&logoColor=black)
+![Version](https://img.shields.io/badge/Version-2.1-F4A717?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-C97B00?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active-00C896?style=for-the-badge)
 
----
+### *One Transaction. All Chains.*
 
-## 🌐 What is OTCoin?
+**OTCoin is a sovereign, independent blockchain network built from scratch — combining the security of Bitcoin, the programmability of Ethereum, and the privacy of Monero.**
 
-**OTCoin** is an independent blockchain network designed to be a universal payment bridge — connecting Bitcoin, Ethereum, Solana, and Hyperliquid into one seamless ecosystem.
+[🌍 Website](https://otcoin.org) • [📄 Whitepaper](https://otcoin.org/OTCoin-Whitepaper-v2.0-EN.docx) • [📊 Dashboard](https://otcoin.org/dashboard.html) • [🔍 Explorer](https://otcoin.org/explorer.html) • [📱 Telegram](https://t.me/+MGYkB80BhlwzNGQ1) • [🐦 Twitter](https://x.com/OTCoinOfficial)
 
-OTCoin is not a token on top of another blockchain. It is its own sovereign chain, built from the ground up with:
-
-- ⛓️ **Independent Proof of Work blockchain**
-- 🔐 **ECDSA secp256k1 cryptography** (same as Bitcoin)
-- 🌉 **Cross-chain bridge** (Bitcoin, Ethereum, Solana, Hyperliquid)
-- 🌍 **Fully decentralized P2P network**
+</div>
 
 ---
 
-## ⚙️ Technical Specifications
+## 🚀 Features
 
-| Property | Details |
-|---|---|
-| **Ticker** | OTC |
-| **Total Supply** | 51,000,000 OTC (hard cap) |
-| **Consensus** | Proof of Work (SHA-256) |
-| **Block Time** | ~10 minutes |
-| **Block Reward** | 50 OTC (halving every 210,000 blocks) |
-| **Cryptography** | ECDSA secp256k1 |
-| **Network** | P2P WebSocket nodes |
-| **Bridge Support** | Bitcoin, Ethereum, Solana, Hyperliquid |
+| Feature | Status | Description |
+|---------|--------|-------------|
+| ⛓️ Blockchain Core | ✅ Live | Full Proof of Work with SHA-256 |
+| 👛 Wallet System | ✅ Live | ECDSA secp256k1 cryptography |
+| 🌐 P2P Network | ✅ Live | WebSocket node network |
+| 🤖 Smart Contracts | ✅ Live | Token, DeFi, NFT, Voting |
+| 🔒 Privacy Layer | ✅ Live | Stealth Address, Ring Signature |
+| ⚡ Lightning Network | ✅ Live | 1000+ tx/sec instant payments |
+| 🌉 Cross-Chain Bridge | ✅ Live | OTC ↔ BTC, ETH, SOL, BNB |
+| 📱 Web Wallet | ✅ Live | Browser-based wallet |
+| 🔍 Block Explorer | ✅ Live | Real-time blockchain explorer |
+| 📊 Mining Dashboard | ✅ Live | Live mining statistics |
+| 🛡️ Security v2.1 | ✅ Live | 7 security enhancements |
+| 🔔 Notifications | ✅ Live | Telegram mining alerts |
 
 ---
 
-## 📁 Repository Structure
+## 📊 Network Stats
 
 ```
-OTCoin/
-├── blockchain.py    # Core blockchain — blocks, mining, validation
-├── wallet.py        # Wallet system with ECDSA cryptography
-├── node.py          # P2P network node with WebSocket
-├── index.html       # Official website
-└── README.md        # This file
+Total Supply    : 51,000,000 OTC (Hard Cap)
+Block Reward    : 50 OTC (Halving every 210,000 blocks)
+Algorithm       : SHA-256 Proof of Work
+Cryptography    : ECDSA secp256k1
+Network ID      : otcoin-mainnet-v2
+Node URL        : ws://76.13.192.203:6001
+API             : http://76.13.192.203:5000/api/stats
 ```
 
 ---
 
-## 🚀 Quick Start
+## ⚡ Quick Start
 
-### 1. Install Requirements
+### 1. Install Python
+```bash
+python --version  # Should be 3.10+
+```
+
+### 2. Install Dependencies
 ```bash
 pip install ecdsa websockets
 ```
 
-### 2. Run the Blockchain
-```bash
-python blockchain.py
-```
-
-### 3. Run the Wallet
+### 3. Create Your Wallet
 ```bash
 python wallet.py
 ```
 
-### 4. Run a P2P Node
+### 4. Start Mining
 ```bash
-# First node
-python node.py --port 6001
+python node.py --port 6002 --peers ws://76.13.192.203:6001 --miner YOUR_WALLET_ADDRESS
+```
 
-# Second node (connect to first)
-python node.py --port 6002 --peers ws://localhost:6001
+### 5. Check Balance via API
+```bash
+curl http://76.13.192.203:5000/api/balance/YOUR_WALLET_ADDRESS
 ```
 
 ---
 
-## 💰 Tokenomics
+## 🏗️ Project Structure
 
-| Allocation | Percentage | Amount |
-|---|---|---|
-| Mining Rewards | 40% | 20,400,000 OTC |
-| Ecosystem & Dev | 20% | 10,200,000 OTC |
-| Founders & Team | 15% | 7,650,000 OTC |
-| Community | 15% | 7,650,000 OTC |
-| Reserve | 10% | 5,100,000 OTC |
+```
+OTCoin/
+├── blockchain.py       # Core blockchain
+├── wallet.py           # ECDSA wallet
+├── node.py             # P2P network
+├── miner.py            # Mining script
+├── smart_contract.py   # Smart contracts
+├── privacy.py          # Privacy layer
+├── lightning.py        # Lightning Network
+├── bridge.py           # Cross-chain bridge
+├── api_server.py       # REST API
+├── index.html          # Website
+├── explorer.html       # Block explorer
+├── wallet.html         # Web wallet
+├── dashboard.html      # Mining dashboard
+├── roadmap.html        # Roadmap
+├── build.html          # Developer guide
+└── get-started.html    # Getting started
+```
 
-### Halving Schedule
+---
 
-| Period | Block Reward |
-|---|---|
-| Block 0 – 210,000 | 50 OTC |
-| Block 210,001 – 420,000 | 25 OTC |
-| Block 420,001 – 630,000 | 12.5 OTC |
-| Block 630,001+ | 6.25 OTC... |
+## 🔐 Security Features (v2.1)
+
+- ✅ Merkle Root Verification
+- ✅ Replay Attack Protection
+- ✅ Double Spend Protection
+- ✅ Mempool Spam Protection
+- ✅ Rate Limiting
+- ✅ Minimum Transaction Fee
+- ✅ Genesis Signature
+- ✅ Private Key Encryption (PBKDF2-SHA256)
+
+---
+
+## 🌉 Cross-Chain Bridge
+
+| Chain | Rate | Fee |
+|-------|------|-----|
+| Bitcoin (BTC) | 1 OTC = 0.000002 BTC | 0.1% |
+| Ethereum (ETH) | 1 OTC = 0.00003 ETH | 0.1% |
+| Solana (SOL) | 1 OTC = 0.0005 SOL | 0.1% |
+| BNB Chain | 1 OTC = 0.0001 BNB | 0.1% |
+
+---
+
+## 🏆 Bug Bounty Program
+
+| Severity | Reward |
+|----------|--------|
+| 🔴 Critical | 10,000 OTC |
+| 🟡 Major | 5,000 OTC |
+| 🟢 Minor | 1,000 OTC |
+| 💡 Improvement | 500 OTC |
+
+Report to: **foundation@otcoin.org**
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Phase 1 — Foundation (Q1 2025)
-- [x] Blockchain core (blocks, mining, validation)
-- [x] Wallet system with ECDSA cryptography
-- [x] P2P network node with WebSocket
-- [x] Official whitepaper published
-- [x] GitHub repository live
-
-### 🔄 Phase 2 — Testnet (Q2–Q3 2025)
-- [ ] Public testnet launch
-- [ ] Community bug bounty program
-- [ ] Independent security audit
-- [ ] Desktop wallet beta release
-- [ ] Official website live
-
-### 🔜 Phase 3 — Mainnet Launch (Q4 2025)
-- [ ] Genesis block — historic moment
-- [ ] Public mining opens worldwide
-- [ ] Block explorer launch
-- [ ] First DEX listing
-
-### 🔜 Phase 4 — Ecosystem (2026)
-- [ ] Cross-chain bridge (Bitcoin & Ethereum)
-- [ ] Solana & Hyperliquid integration
-- [ ] CoinGecko & CoinMarketCap listing
-- [ ] Mobile wallet (iOS & Android)
-- [ ] Centralized exchange applications
+- ✅ **Phase 1** — Foundation (Complete)
+- ⚡ **Phase 2** — Testnet & Community (Active)
+- 🔜 **Phase 3** — Mainnet Launch (Q4 2025)
+- 🔜 **Phase 4** — Ecosystem Expansion (2026)
 
 ---
 
-## 🤝 Contributing
+## 📱 Community
 
-OTCoin is **open source** and welcomes contributions from developers worldwide.
-
-1. Fork this repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 🔐 Security
-
-OTCoin takes security seriously. If you discover a security vulnerability, please contact us at:
-
-📧 **security@otcoin.io**
-
----
-
-## 📬 Contact & Community
-
-| Platform | Link |
-|---|---|
-| 🌐 Website | [otetcrime.github.io/OTCoin](https://otetcrime.github.io/OTCoin) |
-| 🐙 GitHub | [github.com/otetcrime/OTCoin](https://github.com/otetcrime/OTCoin) |
-| 📧 Email | foundation@otcoin.io |
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+- 🌍 Website: [otcoin.org](https://otcoin.org)
+- 📱 Telegram: [t.me/+MGYkB80BhlwzNGQ1](https://t.me/+MGYkB80BhlwzNGQ1)
+- 🐦 Twitter/X: [@OTCoinOfficial](https://x.com/OTCoinOfficial)
+- 📧 Email: foundation@otcoin.org
 
 ---
 
 <div align="center">
 
-**© 2025 OTCoin Foundation. All Rights Reserved.**
-
-*One Transaction. All Chains.*
-
-⭐ Star this repository if you believe in the OTCoin vision!
+**© 2025 OTCoin Foundation — One Transaction. All Chains.**
 
 </div>
