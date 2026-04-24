@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build on OTCoin — Developer Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap');
+
+:root{
+  --g1:#FFD166;--g2:#F4A717;--g3:#C97B00;
+  --void:#03030A;--dark:#07080F;--surf:#0C0D17;--surf2:#161722;
+  --bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;
+  --green:#00C896;--blue:#4B9FFF;--purple:#A78BFA;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,3,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-link{padding:8px 16px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-link:hover{color:var(--g2);}
+.nav-btn{padding:8px 20px;border:1px solid rgba(244,167,23,0.3);color:var(--g2);font-size:11px;letter-spacing:2px;text-decoration:none;border-radius:2px;transition:all .2s;}
+.nav-btn:hover{background:rgba(244,167,23,0.08);}
+
+/* HERO */
+.hero{padding:140px 40px 80px;text-align:center;position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(244,167,23,0.07) 0%,transparent 60%);pointer-events:none;}
+.hero-tag{display:inline-block;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:4px;color:var(--g3);border:1px solid rgba(201,123,0,0.25);padding:6px 16px;margin-bottom:20px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:300;letter-spacing:3px;margin-bottom:16px;}
+.hero h1 span{background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;}
+.hero p{font-size:15px;color:var(--dim);max-width:560px;margin:0 auto 32px;line-height:1.9;}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:0 40px 100px;}
+
+/* TOKEN TYPES */
+.token-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:48px;}
+.token-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:24px;transition:all .3s;cursor:pointer;}
+.token-card:hover{border-color:rgba(244,167,23,0.35);transform:translateY(-2px);}
+.token-icon{font-size:32px;margin-bottom:12px;}
+.token-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--g1);margin-bottom:6px;}
+.token-desc{font-size:13px;color:var(--dim);line-height:1.7;}
+.token-badge{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:99px;font-size:10px;letter-spacing:1px;border:1px solid rgba(244,167,23,0.2);color:var(--g3);}
+
+/* SECTION */
+.section{margin-bottom:56px;}
+.section-tag{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:4px;color:var(--g3);margin-bottom:10px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--g1);margin-bottom:12px;}
+.section-desc{font-size:14px;color:var(--dim);line-height:1.9;margin-bottom:24px;}
+
+/* CODE */
+.code-wrap{background:#060810;border:1px solid rgba(244,167,23,0.12);border-radius:10px;overflow:hidden;margin:16px 0;}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#040508;border-bottom:1px solid rgba(244,167,23,0.08);}
+.code-title{font-family:'Fira Code',monospace;font-size:11px;color:var(--dim);}
+.copy-btn{background:rgba(244,167,23,0.08);border:1px solid rgba(244,167,23,0.15);color:var(--g2);font-size:10px;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:'Tenor Sans',sans-serif;transition:all .2s;}
+.copy-btn:hover{background:rgba(244,167,23,0.15);}
+.code-body{padding:20px 24px;font-family:'Fira Code',monospace;font-size:13px;line-height:1.8;overflow-x:auto;}
+.c-comment{color:#3d4f66;}
+.c-keyword{color:#c792ea;}
+.c-string{color:#c3e88d;}
+.c-number{color:#f78c6c;}
+.c-func{color:#82aaff;}
+.c-class{color:var(--g1);}
+.c-var{color:#a8c0d8;}
+.c-output{color:var(--green);}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid rgba(30,34,53,0.5);}
+.step:last-child{border-bottom:none;}
+.step-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--g3));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#000;flex-shrink:0;}
+.step-content{flex:1;}
+.step-title{font-size:16px;font-weight:600;color:var(--txt);margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--dim);line-height:1.7;}
+
+/* TIP */
+.tip{padding:14px 18px;border-radius:8px;font-size:13px;line-height:1.7;margin:16px 0;display:flex;gap:12px;align-items:flex-start;}
+.tip.gold{background:rgba(244,167,23,0.07);border:1px solid rgba(244,167,23,0.2);color:#fcd34d;}
+.tip.green{background:rgba(0,200,150,0.07);border:1px solid rgba(0,200,150,0.2);color:#6ee7b7;}
+.tip.blue{background:rgba(75,159,255,0.07);border:1px solid rgba(75,159,255,0.2);color:#93c5fd;}
+.tip-icon{font-size:18px;flex-shrink:0;}
+
+/* COMPARE */
+.compare{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin:24px 0;}
+.compare-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:12px 20px;border-bottom:1px solid rgba(30,34,53,0.4);}
+.compare-row:last-child{border-bottom:none;}
+.compare-row.header{background:var(--dark);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+.compare-row .otc{color:var(--g2);font-weight:600;}
+.check{color:var(--green);}
+.cross{color:#FF5060;}
+
+/* CTA */
+.cta{text-align:center;padding:48px;border:1px solid var(--bdr);background:var(--surf);border-radius:8px;margin-top:48px;}
+.cta h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;letter-spacing:3px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
+.cta p{font-size:13px;color:var(--dim);margin-bottom:28px;line-height:1.8;}
+.btn-gold{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;font-size:12px;font-weight:700;letter-spacing:2px;text-decoration:none;border-radius:2px;transition:all .3s;margin:6px;}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(244,167,23,0.3);}
+.btn-outline{display:inline-block;padding:14px 36px;border:1px solid rgba(244,167,23,0.3);color:var(--g2);font-size:12px;letter-spacing:2px;text-decoration:none;border-radius:2px;transition:all .3s;margin:6px;}
+.btn-outline:hover{border-color:var(--g2);background:rgba(244,167,23,0.05);}
+
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(244,167,23,0.2),transparent);margin:40px 0;}
+
+@media(max-width:768px){
+  nav{padding:14px 20px;}
+  .hero{padding:110px 20px 60px;}
+  .main{padding:0 20px 80px;}
+  .token-grid{grid-template-columns:1fr;}
+  .compare-row{grid-template-columns:2fr 1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">OTCOIN</a>
+  <div class="nav-right">
+    <a href="#token" class="nav-link">Token</a>
+    <a href="#defi" class="nav-link">DeFi</a>
+    <a href="#nft" class="nav-link">NFT</a>
+    <a href="get-started.html" class="nav-btn">Get Started →</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Developer Guide</div>
+  <h1>Build on <span>OTCoin</span></h1>
+  <p>Create your own tokens, DeFi protocols, NFT collections, and decentralized applications on top of the OTCoin blockchain — fast, cheap, and secure.</p>
+</div>
+
+<div class="main">
+
+  <!-- WHAT CAN YOU BUILD -->
+  <div class="section">
+    <div class="section-tag">// What You Can Build</div>
+    <div class="section-title">4 Types of Smart Contracts</div>
+    <div class="section-desc">OTCoin's Smart Contract Engine supports four powerful contract types — deploy any of them in minutes.</div>
+
+    <div class="token-grid">
+      <div class="token-card" onclick="scrollTo('#token')">
+        <div class="token-icon">🪙</div>
+        <div class="token-name">OTC Token</div>
+        <div class="token-desc">Create your own fungible token on the OTCoin network. Like ERC-20 on Ethereum, but faster and cheaper.</div>
+        <div class="token-badge">OTC-20 Standard</div>
+      </div>
+      <div class="token-card" onclick="scrollTo('#defi')">
+        <div class="token-icon">🏦</div>
+        <div class="token-name">DeFi Protocol</div>
+        <div class="token-desc">Build lending, borrowing, and yield farming protocols. Automatic interest, liquidations, and collateral management.</div>
+        <div class="token-badge">DeFi Ready</div>
+      </div>
+      <div class="token-card" onclick="scrollTo('#nft')">
+        <div class="token-icon">🎨</div>
+        <div class="token-name">NFT Collection</div>
+        <div class="token-desc">Mint unique digital assets on OTCoin. Create, sell, and trade NFTs with built-in marketplace functionality.</div>
+        <div class="token-badge">OTC-721 Standard</div>
+      </div>
+      <div class="token-card">
+        <div class="token-icon">🗳️</div>
+        <div class="token-name">DAO Voting</div>
+        <div class="token-desc">Deploy transparent, tamper-proof voting systems for your community. Every vote recorded on-chain forever.</div>
+        <div class="token-badge">Governance</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section">
+    <div class="section-tag">// Before You Start</div>
+    <div class="section-title">Requirements</div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Install Python 3.10+</div>
+          <div class="step-desc">Download from python.org — works on Windows, Mac, and Linux.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Download OTCoin Files</div>
+          <div class="step-desc">Download blockchain.py, wallet.py, and smart_contract.py from otcoin.org</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Install Dependencies</div>
+          <div class="step-desc">Run the command below to install required libraries.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-title">terminal</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <div class="code-body">
+        <span class="c-comment"># Install required libraries</span><br>
+        pip install ecdsa websockets
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TOKEN -->
+  <div class="section" id="token">
+    <div class="section-tag">// Step by Step</div>
+    <div class="section-title">🪙 Create Your Own Token</div>
+    <div class="section-desc">Launch your own token on the OTCoin network in under 5 minutes. Set your own name, symbol, and total supply.</div>
+
+    <div class="tip gold"><span class="tip-icon">💡</span> Think of this like creating a new cryptocurrency that lives on top of OTCoin — just like how Shiba Inu and USDT live on Ethereum.</div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-title">create_token.py</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <div class="code-body">
+<span class="c-keyword">from</span> <span class="c-var">smart_contract</span> <span class="c-keyword">import</span> <span class="c-class">OTCTokenContract</span>, <span class="c-class">ContractEngine</span><br><br>
+
+<span class="c-comment"># Initialize the contract engine</span><br>
+<span class="c-var">engine</span> = <span class="c-class">ContractEngine</span>()<br><br>
+
+<span class="c-comment"># Create your token</span><br>
+<span class="c-var">my_token</span> = <span class="c-class">OTCTokenContract</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">creator</span>=<span class="c-string">"YOUR_WALLET_ADDRESS"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">name</span>=<span class="c-string">"My Token"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-comment"># Token name</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">symbol</span>=<span class="c-string">"MTK"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-comment"># Ticker symbol</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">total_supply</span>=<span class="c-number">1_000_000</span>&nbsp;<span class="c-comment"># Total supply</span><br>
+)<br><br>
+
+<span class="c-comment"># Deploy to OTCoin network</span><br>
+<span class="c-var">contract_address</span> = <span class="c-var">engine</span>.<span class="c-func">deploy</span>(<span class="c-var">my_token</span>)<br>
+<span class="c-func">print</span>(<span class="c-string">f"Token deployed at: {contract_address}"</span>)<br><br>
+
+<span class="c-comment"># Transfer tokens</span><br>
+<span class="c-var">engine</span>.<span class="c-func">call</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">contract_address</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"transfer"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<span class="c-string">"to"</span>: <span class="c-string">"RECIPIENT_ADDRESS"</span>, <span class="c-string">"amount"</span>: <span class="c-number">1000</span>},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">sender</span>=<span class="c-string">"YOUR_WALLET_ADDRESS"</span><br>
+)<br><br>
+
+<span class="c-comment"># Check balance</span><br>
+<span class="c-var">result</span> = <span class="c-var">engine</span>.<span class="c-func">call</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">contract_address</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"balance_of"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<span class="c-string">"address"</span>: <span class="c-string">"YOUR_WALLET_ADDRESS"</span>},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">sender</span>=<span class="c-string">"YOUR_WALLET_ADDRESS"</span><br>
+)<br>
+<span class="c-func">print</span>(<span class="c-string">f"Balance: {result['balance']} MTK"</span>)
+      </div>
+    </div>
+
+    <div class="tip green"><span class="tip-icon">✅</span> All 1,000,000 MTK tokens are automatically sent to your wallet address when deployed!</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DEFI -->
+  <div class="section" id="defi">
+    <div class="section-tag">// DeFi Protocol</div>
+    <div class="section-title">🏦 Build a DeFi Lending Protocol</div>
+    <div class="section-desc">Deploy a lending and borrowing protocol where users can deposit OTC to earn interest, or borrow OTC by providing collateral — all automated by smart contracts.</div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-title">create_defi.py</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <div class="code-body">
+<span class="c-keyword">from</span> <span class="c-var">smart_contract</span> <span class="c-keyword">import</span> <span class="c-class">DeFiLendingContract</span>, <span class="c-class">ContractEngine</span><br><br>
+
+<span class="c-var">engine</span> = <span class="c-class">ContractEngine</span>()<br><br>
+
+<span class="c-comment"># Deploy lending protocol with 5% interest rate</span><br>
+<span class="c-var">defi</span> = <span class="c-class">DeFiLendingContract</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">creator</span>=<span class="c-string">"YOUR_WALLET_ADDRESS"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">interest_rate</span>=<span class="c-number">0.05</span>&nbsp;<span class="c-comment"># 5% interest rate</span><br>
+)<br>
+<span class="c-var">defi_addr</span> = <span class="c-var">engine</span>.<span class="c-func">deploy</span>(<span class="c-var">defi</span>)<br><br>
+
+<span class="c-comment"># User deposits 1000 OTC → earns interest</span><br>
+<span class="c-var">engine</span>.<span class="c-func">call</span>(<span class="c-var">defi_addr</span>, <span class="c-string">"deposit"</span>, {}, <span class="c-string">"USER_ADDRESS"</span>, value=<span class="c-number">1000</span>)<br><br>
+
+<span class="c-comment"># Another user borrows 500 OTC</span><br>
+<span class="c-var">engine</span>.<span class="c-func">call</span>(<span class="c-var">defi_addr</span>, <span class="c-string">"borrow"</span>, {<span class="c-string">"amount"</span>: <span class="c-number">500</span>}, <span class="c-string">"BORROWER"</span>)<br><br>
+
+<span class="c-comment"># Check protocol stats</span><br>
+<span class="c-var">stats</span> = <span class="c-var">engine</span>.<span class="c-func">call</span>(<span class="c-var">defi_addr</span>, <span class="c-string">"get_stats"</span>, {}, <span class="c-string">"anyone"</span>)<br>
+<span class="c-func">print</span>(<span class="c-string">f"Total deposited: {stats['total_deposited']} OTC"</span>)<br>
+<span class="c-func">print</span>(<span class="c-string">f"Total borrowed: {stats['total_borrowed']} OTC"</span>)
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- NFT -->
+  <div class="section" id="nft">
+    <div class="section-tag">// NFT Collection</div>
+    <div class="section-title">🎨 Launch an NFT Collection</div>
+    <div class="section-desc">Create and sell unique digital assets on the OTCoin blockchain. Each NFT is stored permanently on-chain and can be bought, sold, and transferred.</div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-title">create_nft.py</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <div class="code-body">
+<span class="c-keyword">from</span> <span class="c-var">smart_contract</span> <span class="c-keyword">import</span> <span class="c-class">NFTContract</span>, <span class="c-class">ContractEngine</span><br><br>
+
+<span class="c-var">engine</span> = <span class="c-class">ContractEngine</span>()<br><br>
+
+<span class="c-comment"># Create NFT collection</span><br>
+<span class="c-var">nft</span> = <span class="c-class">NFTContract</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">creator</span>=<span class="c-string">"YOUR_WALLET_ADDRESS"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">collection_name</span>=<span class="c-string">"My NFT Collection"</span><br>
+)<br>
+<span class="c-var">nft_addr</span> = <span class="c-var">engine</span>.<span class="c-func">deploy</span>(<span class="c-var">nft</span>)<br><br>
+
+<span class="c-comment"># Mint NFT #1 — sell for 100 OTC</span><br>
+<span class="c-var">engine</span>.<span class="c-func">call</span>(<span class="c-var">nft_addr</span>, <span class="c-string">"mint"</span>, {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"metadata"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"name"</span>: <span class="c-string">"Genesis #1"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"rarity"</span>: <span class="c-string">"Legendary"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"image"</span>: <span class="c-string">"https://yoursite.com/nft1.png"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"price"</span>: <span class="c-number">100</span>&nbsp;<span class="c-comment"># 100 OTC</span><br>
+}, <span class="c-string">"YOUR_WALLET_ADDRESS"</span>)<br><br>
+
+<span class="c-comment"># Buyer purchases NFT #1</span><br>
+<span class="c-var">engine</span>.<span class="c-func">call</span>(<span class="c-var">nft_addr</span>, <span class="c-string">"buy"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<span class="c-string">"token_id"</span>: <span class="c-number">1</span>},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">"BUYER_ADDRESS"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">value</span>=<span class="c-number">100</span><br>
+)
+      </div>
+    </div>
+
+    <div class="tip blue"><span class="tip-icon">💡</span> You can store any metadata in your NFT — name, image URL, rarity, attributes, and more!</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- COMPARE -->
+  <div class="section">
+    <div class="section-tag">// Why OTCoin</div>
+    <div class="section-title">OTCoin vs Ethereum for Developers</div>
+
+    <div class="compare">
+      <div class="compare-row header">
+        <div>Feature</div>
+        <div>OTCoin</div>
+        <div>Ethereum</div>
+        <div>Solana</div>
+      </div>
+      <div class="compare-row">
+        <div>Transaction Fee</div>
+        <div class="otc">~0 OTC</div>
+        <div>$5–100</div>
+        <div>$0.001</div>
+      </div>
+      <div class="compare-row">
+        <div>Smart Contracts</div>
+        <div class="otc check">✓ Yes</div>
+        <div class="check">✓ Yes</div>
+        <div class="check">✓ Yes</div>
+      </div>
+      <div class="compare-row">
+        <div>Token Standard</div>
+        <div class="otc">OTC-20</div>
+        <div>ERC-20</div>
+        <div>SPL</div>
+      </div>
+      <div class="compare-row">
+        <div>Privacy Layer</div>
+        <div class="otc check">✓ Built-in</div>
+        <div class="cross">✗ No</div>
+        <div class="cross">✗ No</div>
+      </div>
+      <div class="compare-row">
+        <div>Hard Supply Cap</div>
+        <div class="otc check">✓ 51M OTC</div>
+        <div class="cross">✗ Infinite</div>
+        <div class="cross">✗ Infinite</div>
+      </div>
+      <div class="compare-row">
+        <div>Lightning Network</div>
+        <div class="otc check">✓ Built-in</div>
+        <div class="cross">✗ No</div>
+        <div class="cross">✗ No</div>
+      </div>
+      <div class="compare-row">
+        <div>Language</div>
+        <div class="otc">Python</div>
+        <div>Solidity</div>
+        <div>Rust</div>
+      </div>
+    </div>
+
+    <div class="tip green"><span class="tip-icon">🚀</span> OTCoin uses Python — the most popular programming language in the world. No need to learn Solidity or Rust!</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2>Start Building Today</h2>
+    <p>Join the OTCoin developer community. Deploy your first smart contract in minutes — it's free and open source.</p>
+    <a href="get-started.html" class="btn-gold">Get Started →</a>
+    <a href="https://github.com/OTCoinFoundation/OTCoin" target="_blank" class="btn-outline">View on GitHub</a>
+    <a href="mailto:foundation@otcoin.org" class="btn-outline">Contact Us</a>
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const code = btn.closest('.code-wrap').querySelector('.code-body').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
+</body>
+</html>
