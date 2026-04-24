@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTCoin Roadmap</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap');
+
+:root{
+  --g1:#FFD166;--g2:#F4A717;--g3:#C97B00;
+  --void:#03030A;--dark:#07080F;--surf:#0C0D17;--surf2:#161722;
+  --bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;
+  --green:#00C896;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,3,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;}
+.back{padding:8px 20px;border:1px solid var(--bdr);color:var(--g2);font-size:11px;letter-spacing:2px;text-decoration:none;border-radius:2px;transition:all .2s;}
+.back:hover{border-color:var(--g2);}
+
+.hero{padding:140px 40px 60px;text-align:center;}
+.hero-tag{display:inline-block;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:4px;color:var(--g3);border:1px solid rgba(201,123,0,0.25);padding:6px 16px;margin-bottom:20px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,72px);font-weight:300;letter-spacing:4px;margin-bottom:12px;}
+.hero h1 span{background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;}
+.hero p{font-size:14px;color:var(--dim);max-width:500px;margin:0 auto;line-height:1.9;}
+
+/* PROGRESS BAR */
+.progress-wrap{max-width:800px;margin:0 auto 60px;padding:0 40px;}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.progress-bar{background:var(--surf);border:1px solid var(--bdr);border-radius:99px;height:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--g3),var(--g2),var(--g1));border-radius:99px;width:25%;transition:width 1s ease;}
+
+/* PHASES */
+.phases{max-width:800px;margin:0 auto;padding:0 40px 100px;}
+
+.phase{margin-bottom:48px;position:relative;}
+.phase::before{content:'';position:absolute;left:19px;top:48px;bottom:-48px;width:2px;background:linear-gradient(to bottom,rgba(244,167,23,0.3),transparent);}
+.phase:last-child::before{display:none;}
+
+.phase-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.phase-dot{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.phase-dot.done{background:linear-gradient(135deg,var(--g2),var(--g3));box-shadow:0 0 20px rgba(244,167,23,0.3);}
+.phase-dot.active{background:var(--surf);border:2px solid var(--g2);animation:pulse 2s ease-in-out infinite;}
+.phase-dot.pending{background:var(--surf);border:2px solid rgba(244,167,23,0.15);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(244,167,23,0.4);}50%{box-shadow:0 0 0 8px rgba(244,167,23,0);}}
+
+.phase-info{}
+.phase-num{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:3px;color:var(--g3);margin-bottom:2px;}
+.phase-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;}
+.phase-title.done{color:var(--g1);}
+.phase-title.active{color:var(--txt);}
+.phase-title.pending{color:var(--dim);}
+.phase-period{font-size:12px;color:var(--dim);margin-top:2px;}
+
+.phase-badge{margin-left:auto;padding:4px 12px;border-radius:99px;font-size:10px;letter-spacing:1px;flex-shrink:0;}
+.badge-done{background:rgba(0,200,150,0.1);color:var(--green);border:1px solid rgba(0,200,150,0.2);}
+.badge-active{background:rgba(244,167,23,0.1);color:var(--g2);border:1px solid rgba(244,167,23,0.2);}
+.badge-pending{background:var(--surf2);color:var(--dim);border:1px solid rgba(90,92,120,0.2);}
+
+.phase-items{margin-left:56px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.phase-item{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:var(--surf);border:1px solid var(--bdr);border-radius:6px;font-size:12px;line-height:1.6;}
+.phase-item.done{border-color:rgba(0,200,150,0.15);}
+.phase-item .check{flex-shrink:0;font-size:14px;}
+
+@media(max-width:768px){
+  nav{padding:14px 20px;}
+  .hero{padding:110px 20px 40px;}
+  .progress-wrap,.phases{padding:0 20px 60px;}
+  .phase-items{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">OTCOIN</a>
+  <a href="index.html" class="back">← Home</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Roadmap</div>
+  <h1>OTCoin <span>Progress</span></h1>
+  <p>From zero to a complete blockchain ecosystem — here's where we are and where we're going.</p>
+</div>
+
+<!-- OVERALL PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Overall Progress</span>
+    <span>Phase 1 Complete — 25%</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill"></div>
+  </div>
+</div>
+
+<!-- PHASES -->
+<div class="phases">
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-dot done">✓</div>
+      <div class="phase-info">
+        <div class="phase-num">// PHASE 1</div>
+        <div class="phase-title done">Foundation</div>
+        <div class="phase-period">Q1 2025 — Completed ✅</div>
+      </div>
+      <div class="phase-badge badge-done">✓ COMPLETE</div>
+    </div>
+    <div class="phase-items">
+      <div class="phase-item done"><span class="check">✅</span>Blockchain core dengan Proof of Work</div>
+      <div class="phase-item done"><span class="check">✅</span>Wallet ECDSA secp256k1</div>
+      <div class="phase-item done"><span class="check">✅</span>P2P WebSocket network</div>
+      <div class="phase-item done"><span class="check">✅</span>Smart Contract Engine</div>
+      <div class="phase-item done"><span class="check">✅</span>Privacy Layer (Stealth, Ring Sig)</div>
+      <div class="phase-item done"><span class="check">✅</span>Lightning Network</div>
+      <div class="phase-item done"><span class="check">✅</span>Cross-Chain Bridge</div>
+      <div class="phase-item done"><span class="check">✅</span>Web Wallet & Block Explorer</div>
+      <div class="phase-item done"><span class="check">✅</span>Website otcoin.org live</div>
+      <div class="phase-item done"><span class="check">✅</span>GitHub OTCoinFoundation</div>
+      <div class="phase-item done"><span class="check">✅</span>VPS mining 24/7</div>
+      <div class="phase-item done"><span class="check">✅</span>Cloudflare HTTPS & DDoS</div>
+      <div class="phase-item done"><span class="check">✅</span>Firewall + Fail2ban + 2FA</div>
+      <div class="phase-item done"><span class="check">✅</span>Auto-restart & Notifikasi Telegram</div>
+      <div class="phase-item done"><span class="check">✅</span>Whitepaper EN & ID</div>
+      <div class="phase-item done"><span class="check">✅</span>Pitch Deck & Logo</div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-dot active">⚡</div>
+      <div class="phase-info">
+        <div class="phase-num">// PHASE 2</div>
+        <div class="phase-title active">Testnet & Community</div>
+        <div class="phase-period">Q2–Q3 2025 — In Progress</div>
+      </div>
+      <div class="phase-badge badge-active">⚡ ACTIVE</div>
+    </div>
+    <div class="phase-items">
+      <div class="phase-item"><span class="check">⏳</span>Public testnet launch</div>
+      <div class="phase-item"><span class="check">⏳</span>Bug bounty program</div>
+      <div class="phase-item"><span class="check">⏳</span>Security audit firma</div>
+      <div class="phase-item"><span class="check">⏳</span>Target 1,000 komunitas</div>
+      <div class="phase-item"><span class="check">⏳</span>Desktop wallet beta</div>
+      <div class="phase-item"><span class="check">⏳</span>Developer recruitment</div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-dot pending">🚀</div>
+      <div class="phase-info">
+        <div class="phase-num">// PHASE 3</div>
+        <div class="phase-title pending">Mainnet Launch</div>
+        <div class="phase-period">Q4 2025</div>
+      </div>
+      <div class="phase-badge badge-pending">UPCOMING</div>
+    </div>
+    <div class="phase-items">
+      <div class="phase-item"><span class="check">🔜</span>Genesis block resmi</div>
+      <div class="phase-item"><span class="check">🔜</span>Public mining terbuka</div>
+      <div class="phase-item"><span class="check">🔜</span>Block explorer publik</div>
+      <div class="phase-item"><span class="check">🔜</span>First DEX listing</div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-dot pending">🌍</div>
+      <div class="phase-info">
+        <div class="phase-num">// PHASE 4</div>
+        <div class="phase-title pending">Ecosystem Expansion</div>
+        <div class="phase-period">2026</div>
+      </div>
+      <div class="phase-badge badge-pending">PLANNED</div>
+    </div>
+    <div class="phase-items">
+      <div class="phase-item"><span class="check">🔜</span>Cross-chain bridge live</div>
+      <div class="phase-item"><span class="check">🔜</span>CoinGecko & CMC listing</div>
+      <div class="phase-item"><span class="check">🔜</span>Mobile wallet iOS & Android</div>
+      <div class="phase-item"><span class="check">🔜</span>CEX exchange applications</div>
+      <div class="phase-item"><span class="check">🔜</span>Developer SDK</div>
+      <div class="phase-item"><span class="check">🔜</span>Mass adoption campaign</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){
+  if(e.ctrlKey&&["u","U","s","S","i","I","j","J"].includes(e.key)){e.preventDefault();}
+  if(e.key==="F12"){e.preventDefault();}
+});
+</script>
+</body>
+</html>
