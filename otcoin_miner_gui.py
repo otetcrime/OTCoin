@@ -79,9 +79,32 @@ class OTCoinMinerApp:
         self.wallet_entry.insert(0, "Enter your OTCoin wallet address...")
         self.wallet_entry.bind("<FocusIn>", self._clear_placeholder)
 
-        tk.Label(wallet_frame,
-                 text="💡 Don't have a wallet? Download wallet.py from otcoin.org",
-                 font=("Courier", 8), bg=BG_DARK, fg=DIM_COLOR).pack(anchor="w")
+        btn_row = tk.Frame(wallet_frame, bg=BG_DARK)
+        btn_row.pack(fill="x", pady=4)
+
+        btn_gen = tk.Button(
+            btn_row,
+            text="🔑 Generate Wallet",
+            font=("Courier", 9),
+            bg=BG_SURF, fg=GOLD,
+            activebackground=BG_MID,
+            relief="flat", bd=4,
+            cursor="hand2",
+            command=self._generate_wallet
+        )
+        btn_gen.pack(side="left", padx=(0,4))
+
+        btn_bal = tk.Button(
+            btn_row,
+            text="💰 Check Balance",
+            font=("Courier", 9),
+            bg=BG_SURF, fg="#00C896",
+            activebackground=BG_MID,
+            relief="flat", bd=4,
+            cursor="hand2",
+            command=self._check_balance
+        )
+        btn_bal.pack(side="left")
 
         # ── STATS ────────────────────────────────
         stats_frame = tk.Frame(self.root, bg=BG_DARK, padx=24)
@@ -193,6 +216,66 @@ class OTCoinMinerApp:
         self.log.see("end")
         self.log.configure(state="disabled")
 
+    def _check_balance(self):
+        wallet = self.wallet_entry.get().strip()
+        if not wallet or wallet == "Enter your OTCoin wallet address...":
+            import tkinter.messagebox as mb
+            mb.showerror("Error", "Masukkan wallet address dulu!")
+            return
+        try:
+            import urllib.request
+            import json
+            url = f"http://76.13.192.203:5000/api/balance/{wallet}"
+            res = urllib.request.urlopen(url, timeout=5)
+            data = json.loads(res.read())
+            balance = data.get("balance", 0)
+            import tkinter.messagebox as mb
+            msg = ("Address: " + wallet[:20] + "...\n\n" +
+                   "Balance: " + f"{balance:,.4f}" + " OTC\n\n" +
+                   "Network: OTCoin Mainnet\nNode: 76.13.192.203")
+            mb.showinfo("💰 Wallet Balance", msg)
+        except Exception as e:
+            import tkinter.messagebox as mb
+            mb.showerror("Error", f"Tidak bisa cek balance: {e}")
+
+    def _generate_wallet(self):
+        import hashlib, secrets
+        try:
+            from ecdsa import SigningKey, SECP256k1
+            sk = SigningKey.generate(curve=SECP256k1)
+            vk = sk.get_verifying_key()
+            pub = vk.to_string()
+            sha256 = hashlib.sha256(pub).digest()
+            ripemd = hashlib.new("ripemd160")
+            ripemd.update(sha256)
+            address = "1" + ripemd.hexdigest()
+            private_key = sk.to_string().hex()
+
+            # Show wallet info
+            import tkinter.simpledialog as sd
+            msg = f"""✅ Wallet Baru Berhasil Dibuat!
+
+ADDRESS (share ini untuk mining):
+{address}
+
+PRIVATE KEY (RAHASIA - jangan bagikan!):
+{private_key[:32]}...{private_key[-8:]}
+
+⚠️ SIMPAN PRIVATE KEY DI TEMPAT AMAN!
+Tanpa private key, OTC kamu tidak bisa diakses!"""
+
+            import tkinter.messagebox as mb
+            mb.showinfo("OTCoin Wallet", msg)
+
+            # Auto-fill wallet address
+            self.wallet_entry.delete(0, "end")
+            self.wallet_entry.insert(0, address)
+            self._log(f"Wallet baru: {address[:20]}...", "gold")
+
+        except ImportError:
+            import tkinter.messagebox as mb
+            mb.showerror("Error", "Install ecdsa dulu: pip install ecdsa")
+
     def toggle_mining(self):
         if not self.mining:
             self.start_mining()
@@ -240,7 +323,10 @@ class OTCoinMinerApp:
         try:
             # Import blockchain
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            from blockchain import Blockchain
+            try:
+                from blockchain_light import Blockchain
+            except:
+                from blockchain import Blockchain
 
             self._log("Loading blockchain...", "dim")
             bc = Blockchain()
