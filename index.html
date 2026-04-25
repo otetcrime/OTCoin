@@ -204,8 +204,47 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 
   <div class="hright">
     <div class="cwrap">
       <div class="cglow"></div>
-
-      <svg class="mcoin" viewBox="0 0 260 260" fill="none">
+      <svg viewBox="0 0 300 300" width="300" height="300" style="display:block;margin:0 auto;filter:drop-shadow(0 0 40px rgba(244,167,23,0.3));">
+        <defs>
+          <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFD166"/>
+            <stop offset="50%" stop-color="#F4A717"/>
+            <stop offset="100%" stop-color="#C97B00"/>
+          </linearGradient>
+          <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#F4A717" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#F4A717" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Glow -->
+        <circle cx="150" cy="150" r="148" fill="url(#logoGlow)"/>
+        <!-- Orbit rings -->
+        <circle cx="150" cy="150" r="145" fill="none" stroke="#F4A717" stroke-width="0.8" stroke-opacity="0.15" stroke-dasharray="6,10"/>
+        <circle cx="150" cy="150" r="125" fill="none" stroke="#F4A717" stroke-width="0.8" stroke-opacity="0.2" stroke-dasharray="3,8"/>
+        <!-- Orbit dots -->
+        <circle cx="150" cy="5" r="5" fill="#FFD166"/>
+        <circle cx="150" cy="295" r="5" fill="#FFD166"/>
+        <circle cx="5" cy="150" r="5" fill="#FFD166"/>
+        <circle cx="295" cy="150" r="5" fill="#FFD166"/>
+        <!-- Main coin -->
+        <circle cx="150" cy="150" r="110" fill="url(#logoGold)"/>
+        <circle cx="153" cy="153" r="108" fill="#8B5500" opacity="0.2"/>
+        <circle cx="150" cy="150" r="108" fill="#0A0600"/>
+        <circle cx="150" cy="150" r="105" fill="url(#logoGold)" opacity="0.08"/>
+        <circle cx="150" cy="150" r="96" fill="none" stroke="url(#logoGold)" stroke-width="2"/>
+        <circle cx="150" cy="150" r="90" fill="#060400"/>
+        <!-- Shimmer -->
+        <ellipse cx="125" cy="122" rx="32" ry="18" fill="white" opacity="0.05" transform="rotate(-30 125 122)"/>
+        <!-- OTC Text -->
+        <text x="150" y="140" font-family="Georgia,serif" font-size="46" font-weight="bold" text-anchor="middle" fill="url(#logoGold)" letter-spacing="3">OTC</text>
+        <text x="150" y="168" font-family="Georgia,serif" font-size="14" text-anchor="middle" fill="#C97B00" letter-spacing="7">COIN</text>
+        <!-- Small stars -->
+        <circle cx="240" cy="65" r="2.5" fill="#FFD166" opacity="0.6"/>
+        <circle cx="60" cy="235" r="2" fill="#FFD166" opacity="0.4"/>
+        <circle cx="255" cy="235" r="2" fill="#FFD166" opacity="0.5"/>
+        <circle cx="45" cy="65" r="1.5" fill="#FFD166" opacity="0.4"/>
+      </svg>
+    </div>
         <defs>
           <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#FFD166"/>
