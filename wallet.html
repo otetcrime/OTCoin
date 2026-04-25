@@ -7,6 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ripemd160/2.0.2/ripemd160.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap');
 :root{--g1:#FFD166;--g2:#F4A717;--g3:#C97B00;--void:#03030A;--dark:#07080F;--surf:#0C0D17;--bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;--green:#00C896;--red:#FF5060;}
@@ -184,14 +185,24 @@ input::placeholder{color:var(--dim);}
 <script>
 const EC = elliptic.ec;
 const ec = new EC('secp256k1');
-const API = 'http://76.13.192.203:5000';
+const API = 'http://76.13.192.203/api';
 let myAddr='', myBal=0, myPk=null, tmpW=null;
 
 async function pubToAddr(pubHex) {
+  // Exactly like Python wallet.py:
+  // SHA256(pubkey) → RIPEMD160 → "1" + hex
   const bytes = hexToBytes(pubHex);
-  const h1 = sha256.array(bytes);
-  const h2 = sha256.array(h1);
-  return '1' + bytesToHex(h2.slice(0,20));
+  const sha256Hash = sha256.array(bytes);
+  try {
+    // Try ripemd160 if available
+    const ripe = new RIPEMD160();
+    ripe.update(sha256Hash);
+    return '1' + ripe.digest('hex');
+  } catch(e) {
+    // Fallback
+    const h2 = sha256.array(sha256Hash);
+    return '1' + bytesToHex(h2.slice(0,20));
+  }
 }
 
 async function createWallet() {
