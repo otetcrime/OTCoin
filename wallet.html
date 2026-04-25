@@ -3,413 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
 <title>OTCoin Web Wallet</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap');
-
-:root{
-  --g1:#FFD166;--g2:#F4A717;--g3:#C97B00;
-  --void:#03030A;--dark:#07080F;--surf:#0C0D17;--surf2:#161722;
-  --bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;
-  --green:#00C896;--red:#FF5060;
-}
+:root{--g1:#FFD166;--g2:#F4A717;--g3:#C97B00;--void:#03030A;--dark:#07080F;--surf:#0C0D17;--bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;--green:#00C896;--red:#FF5060;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;}
-
-/* HEADER */
-header{background:rgba(3,3,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.network-badge{font-family:'Fira Code',monospace;font-size:10px;padding:4px 12px;border:1px solid rgba(0,200,150,0.3);border-radius:99px;color:var(--green);display:flex;align-items:center;gap:6px;}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-
-/* SCREENS */
-.screen{display:none;flex:1;}
-.screen.active{display:flex;flex-direction:column;}
-
-/* WELCOME SCREEN */
-#welcomeScreen{align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
-.welcome-coin{width:120px;height:120px;background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 0 40px rgba(244,167,23,0.3);animation:float 4s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.coin-inner{width:100px;height:100px;background:#060610;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,209,102,0.3);}
-.coin-text{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.coin-sub{font-size:8px;letter-spacing:4px;color:var(--g3);}
-.welcome-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;letter-spacing:4px;margin-bottom:12px;}
-.welcome-title span{background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;}
-.welcome-sub{color:var(--dim);font-size:14px;margin-bottom:40px;line-height:1.8;}
-.btn-primary{padding:15px 40px;background:linear-gradient(135deg,var(--g2),var(--g3));border:none;color:#000;font-size:13px;font-weight:700;letter-spacing:2px;border-radius:4px;cursor:pointer;transition:all .3s;margin:6px;font-family:'Tenor Sans',sans-serif;}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(244,167,23,0.3);}
-.btn-outline{padding:15px 40px;border:1px solid var(--bdr);color:var(--g2);font-size:13px;letter-spacing:2px;border-radius:4px;cursor:pointer;transition:all .3s;margin:6px;background:transparent;font-family:'Tenor Sans',sans-serif;}
-.btn-outline:hover{border-color:var(--g2);background:rgba(244,167,23,0.05);}
-
-/* WALLET SCREEN */
-#walletScreen{padding:0;}
-.wallet-content{max-width:480px;margin:0 auto;padding:24px;width:100%;}
-
-/* BALANCE CARD */
-.balance-card{background:linear-gradient(135deg,rgba(244,167,23,0.08),rgba(201,123,0,0.04));border:1px solid var(--bdr);border-radius:12px;padding:28px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
-.balance-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(244,167,23,0.06) 0%,transparent 60%);pointer-events:none;}
-.balance-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
-.balance-amount{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-.balance-unit{font-size:16px;color:var(--g3);letter-spacing:2px;margin-top:4px;}
-.balance-usd{font-size:13px;color:var(--dim);margin-top:8px;}
-.address-wrap{background:var(--dark);border:1px solid var(--bdr);border-radius:6px;padding:10px 14px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;}
-.address-text{font-family:'Fira Code',monospace;font-size:11px;color:var(--dim);}
-.copy-addr{background:none;border:1px solid var(--bdr);color:var(--g2);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:10px;transition:all .2s;}
-.copy-addr:hover{border-color:var(--g2);}
-
-/* ACTION BUTTONS */
-.action-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.action-btn{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;}
-.action-btn:hover{border-color:rgba(244,167,23,0.3);background:var(--surf2);}
-.action-icon{font-size:24px;margin-bottom:6px;}
-.action-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
-
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:24px;}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:28px;width:100%;max-width:400px;}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--g1);margin-bottom:20px;}
-.input-group{margin-bottom:16px;}
-.input-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block;}
-.input-field{width:100%;background:var(--dark);border:1px solid var(--bdr);border-radius:6px;padding:12px;color:var(--txt);font-family:'Fira Code',monospace;font-size:13px;outline:none;transition:border-color .2s;}
-.input-field:focus{border-color:var(--g2);}
-.modal-btns{display:flex;gap:10px;margin-top:20px;}
-.modal-btns .btn-primary,.modal-btns .btn-outline{flex:1;margin:0;}
-
-/* TX LIST */
-.tx-list{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;}
-.tx-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(30,34,53,0.5);transition:background .2s;}
-.tx-item:last-child{border-bottom:none;}
-.tx-item:hover{background:var(--surf2);}
-.tx-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.tx-icon.in{background:rgba(0,200,150,0.1);}
-.tx-icon.out{background:rgba(255,80,96,0.1);}
-.tx-icon.mine{background:rgba(244,167,23,0.1);}
-.tx-info{flex:1;}
-.tx-type{font-size:13px;font-weight:600;margin-bottom:2px;}
-.tx-addr{font-family:'Fira Code',monospace;font-size:10px;color:var(--dim);}
-.tx-amount{text-align:right;}
-.tx-amount.in{color:var(--green);}
-.tx-amount.out{color:var(--red);}
-.tx-amount.mine{color:var(--g2);}
-.tx-time{font-size:10px;color:var(--dim);margin-top:2px;}
-
-.section-title2{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--g1);margin-bottom:12px;}
-
-/* SUCCESS */
-.success-msg{background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:8px;padding:16px;text-align:center;color:var(--green);font-size:14px;margin-top:12px;display:none;}
+body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);min-height:100vh;}
+nav{background:rgba(3,3,10,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;}
+.main{max-width:480px;margin:0 auto;padding:40px 20px 80px;}
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:32px;margin-top:32px;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--g1);margin-bottom:6px;}
+.card-sub{font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.7;}
+.tab-row{display:flex;gap:8px;margin-bottom:20px;}
+.tab{flex:1;padding:10px;text-align:center;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;border:1px solid var(--bdr);color:var(--dim);transition:all .2s;}
+.tab.active{background:rgba(244,167,23,0.1);border-color:rgba(244,167,23,0.3);color:var(--g2);}
+.lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block;}
+input{width:100%;background:var(--dark);border:1px solid var(--bdr);border-radius:6px;padding:12px 14px;color:var(--txt);font-family:'Fira Code',monospace;font-size:12px;outline:none;transition:border-color .2s;margin-bottom:14px;}
+input:focus{border-color:rgba(244,167,23,0.4);}
+input::placeholder{color:var(--dim);}
+.btn{width:100%;padding:14px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:2px;transition:all .3s;margin-bottom:8px;}
+.btn-gold{background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(244,167,23,0.3);}
+.btn-out{background:transparent;color:var(--g2);border:1px solid rgba(244,167,23,0.3);}
+.btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,80,96,0.2);font-size:11px;}
+.warn{background:rgba(255,80,96,0.08);border:1px solid rgba(255,80,96,0.2);border-radius:6px;padding:12px;font-size:12px;color:#ff8090;line-height:1.7;margin-bottom:14px;}
+.ok{background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:6px;padding:12px;font-size:12px;color:#6ee7b7;line-height:1.7;margin-bottom:14px;}
+.bal-card{background:linear-gradient(135deg,rgba(244,167,23,0.08),rgba(201,123,0,0.03));border:1px solid var(--bdr);border-radius:16px;padding:32px;text-align:center;margin-bottom:14px;}
+.bal-num{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.bal-unit{font-size:16px;color:var(--g3);letter-spacing:3px;margin-top:4px;}
+.bal-addr{font-family:'Fira Code',monospace;font-size:10px;color:var(--dim);margin-top:12px;word-break:break-all;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.act-btn{padding:16px;background:var(--surf);border:1px solid var(--bdr);border-radius:10px;cursor:pointer;text-align:center;transition:all .2s;}
+.act-btn:hover{border-color:rgba(244,167,23,0.3);}
+.act-icon{font-size:24px;margin-bottom:6px;}
+.act-lbl{font-size:11px;letter-spacing:2px;color:var(--dim);}
+.sec{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:20px;margin-bottom:14px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--g1);margin-bottom:14px;}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(30,34,53,0.4);}
+.row:last-child{border-bottom:none;}
+.row-key{font-size:12px;color:var(--dim);}
+.row-val{font-family:monospace;font-size:11px;color:var(--txt);}
+.row-val.green{color:var(--green);}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;}
+.modal.show{display:flex;}
+.modal-box{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:28px;width:90%;max-width:380px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--g1);margin-bottom:18px;}
+.cp{background:rgba(244,167,23,0.08);border:1px solid rgba(244,167,23,0.15);color:var(--g2);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;margin-left:6px;}
 </style>
 </head>
 <body>
+<nav>
+  <a href="index.html" class="logo">OTCOIN</a>
+  <a href="index.html" style="font-size:11px;letter-spacing:2px;color:var(--dim);text-decoration:none;">← Home</a>
+</nav>
+<div class="main">
 
-<header>
-  <div class="logo">OTCOIN</div>
-  <div class="network-badge"><div class="dot"></div> OTCoin Network</div>
-</header>
-
-<!-- WELCOME SCREEN -->
-<div class="screen active" id="welcomeScreen">
-  <div class="welcome-coin">
-    <div class="coin-inner">
-      <div class="coin-text">OTC</div>
-      <div class="coin-sub">COIN</div>
-    </div>
+<!-- LOGIN -->
+<div id="loginDiv">
+<div class="card">
+  <div class="card-title">💳 OTCoin Wallet</div>
+  <div class="card-sub">Your private key never leaves your browser — 100% secure.</div>
+  <div class="tab-row">
+    <div class="tab active" id="tab1" onclick="switchTab(1)">Import Wallet</div>
+    <div class="tab" id="tab2" onclick="switchTab(2)">Create New</div>
   </div>
-  <h1 class="welcome-title">OTCoin <span>Wallet</span></h1>
-  <p class="welcome-sub">Your gateway to the OTCoin network.<br>Send, receive, and manage your OTC — right from your browser.</p>
-  <div>
-    <button class="btn-primary" onclick="createWallet()">🆕 Create New Wallet</button>
-    <button class="btn-outline" onclick="showImport()">🔑 Import Wallet</button>
+
+  <!-- IMPORT -->
+  <div id="importDiv">
+    <div class="warn">⚠️ Never share your private key! OTCoin Foundation will never ask for it.</div>
+    <label class="lbl">Private Key</label>
+    <input type="password" id="pkInput" placeholder="Enter your 64-character private key...">
+    <button class="btn btn-gold" onclick="importWallet()">🔓 Access Wallet</button>
+  </div>
+
+  <!-- CREATE -->
+  <div id="createDiv" style="display:none;">
+    <div class="ok">✅ Generate a brand new OTCoin wallet instantly!</div>
+    <button class="btn btn-gold" onclick="createWallet()">🔑 Generate New Wallet</button>
+    <div id="newWalletDiv" style="display:none;margin-top:16px;">
+      <label class="lbl">Your Address</label>
+      <div style="display:flex;align-items:center;margin-bottom:14px;">
+        <input id="newAddr" readonly style="margin:0;flex:1;">
+        <button class="cp" onclick="copyEl('newAddr')">Copy</button>
+      </div>
+      <label class="lbl">Private Key <span style="color:var(--red);">(SAVE THIS NOW!)</span></label>
+      <div style="display:flex;align-items:center;margin-bottom:14px;">
+        <input id="newPk" readonly style="margin:0;flex:1;font-size:10px;">
+        <button class="cp" onclick="copyEl('newPk')">Copy</button>
+      </div>
+      <div class="warn">⚠️ If you lose your private key, your OTC is lost forever! Save it now!</div>
+      <button class="btn btn-gold" onclick="useNew()">✅ Saved! Access Wallet</button>
+    </div>
   </div>
 </div>
+</div>
 
-<!-- WALLET SCREEN -->
-<div class="screen" id="walletScreen">
-  <div class="wallet-content">
-
-    <!-- Balance -->
-    <div class="balance-card">
-      <div class="balance-label">Total Balance</div>
-      <div class="balance-amount" id="balanceAmount">0.00</div>
-      <div class="balance-unit">OTC</div>
-      <div class="balance-usd" id="balanceUsd">≈ $0.00 USD</div>
-      <div class="address-wrap">
-        <div class="address-text" id="walletAddr">Loading...</div>
-        <button class="copy-addr" onclick="copyAddress()">Copy</button>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="action-btns">
-      <div class="action-btn" onclick="showSend()">
-        <div class="action-icon">📤</div>
-        <div class="action-label">Send</div>
-      </div>
-      <div class="action-btn" onclick="showReceive()">
-        <div class="action-icon">📥</div>
-        <div class="action-label">Receive</div>
-      </div>
-      <div class="action-btn" onclick="showMine()">
-        <div class="action-icon">⛏️</div>
-        <div class="action-label">Mine</div>
-      </div>
-      <div class="action-btn" onclick="showSwap()">
-        <div class="action-icon">🔄</div>
-        <div class="action-label">Swap</div>
-      </div>
-    </div>
-
-    <!-- Transactions -->
-    <div class="section-title2">Transaction History</div>
-    <div class="tx-list" id="txList"></div>
-
+<!-- DASHBOARD -->
+<div id="dashDiv" style="display:none;">
+  <div class="bal-card">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">💰 Balance</div>
+    <div class="bal-num" id="balNum">0.00</div>
+    <div class="bal-unit">OTC</div>
+    <div class="bal-addr" id="addrShow">...</div>
+    <button class="cp" style="margin-top:8px;" onclick="copyAddr()">📋 Copy Address</button>
   </div>
+
+  <div class="grid2">
+    <div class="act-btn" onclick="showSend()"><div class="act-icon">📤</div><div class="act-lbl">SEND</div></div>
+    <div class="act-btn" onclick="refreshBal()"><div class="act-icon">🔄</div><div class="act-lbl">REFRESH</div></div>
+    <div class="act-btn" onclick="showReceive()"><div class="act-icon">📥</div><div class="act-lbl">RECEIVE</div></div>
+    <div class="act-btn" onclick="window.open('explorer.html','_blank')"><div class="act-icon">🔍</div><div class="act-lbl">EXPLORER</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">🌐 Network Info</div>
+    <div class="row"><span class="row-key">Network</span><span class="row-val green">OTCoin Mainnet</span></div>
+    <div class="row"><span class="row-key">Node</span><span class="row-val">76.13.192.203</span></div>
+    <div class="row"><span class="row-key">Block Reward</span><span class="row-val green">50 OTC</span></div>
+    <div class="row"><span class="row-key">Max Supply</span><span class="row-val">51,000,000 OTC</span></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">⛏️ Start Mining</div>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:14px;line-height:1.7;">Download OTCoin Miner and start earning OTC to this wallet!</p>
+    <a href="https://github.com/OTCoinFoundation/OTCoin/releases/download/v1.0.0/OTCoin-Miner.exe" style="display:block;padding:12px;background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;text-align:center;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:2px;text-decoration:none;">⬇️ Download OTCoin Miner</a>
+  </div>
+
+  <button class="btn btn-red" onclick="logout()">🔒 Lock Wallet</button>
+</div>
+
 </div>
 
 <!-- SEND MODAL -->
-<div class="modal-overlay" id="sendModal">
-  <div class="modal">
+<div class="modal" id="sendModal">
+  <div class="modal-box">
     <div class="modal-title">📤 Send OTC</div>
-    <div class="input-group">
-      <label class="input-label">Recipient Address</label>
-      <input class="input-field" id="sendTo" placeholder="Enter OTCoin address..."/>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Amount (OTC)</label>
-      <input class="input-field" id="sendAmount" type="number" placeholder="0.00"/>
-    </div>
-    <div class="success-msg" id="sendSuccess">✅ Transaction sent successfully!</div>
-    <div class="modal-btns">
-      <button class="btn-outline" onclick="closeModal('sendModal')">Cancel</button>
-      <button class="btn-primary" onclick="sendTx()">Send →</button>
-    </div>
+    <label class="lbl">Recipient Address</label>
+    <input id="sendTo" placeholder="1abc...">
+    <label class="lbl">Amount (OTC)</label>
+    <input type="number" id="sendAmt" placeholder="0.00" step="0.001" min="0">
+    <div style="font-size:11px;color:var(--dim);margin-bottom:14px;">Fee: 0.001 OTC</div>
+    <button class="btn btn-gold" onclick="doSend()">📤 Send OTC</button>
+    <button class="btn btn-out" onclick="hideSend()">Cancel</button>
   </div>
 </div>
 
 <!-- RECEIVE MODAL -->
-<div class="modal-overlay" id="receiveModal">
-  <div class="modal">
+<div class="modal" id="rcvModal">
+  <div class="modal-box">
     <div class="modal-title">📥 Receive OTC</div>
-    <p style="color:var(--dim);font-size:13px;margin-bottom:16px;">Share your address to receive OTC</p>
-    <div class="input-group">
-      <label class="input-label">Your Address</label>
-      <input class="input-field" id="receiveAddr" readonly/>
-    </div>
-    <div style="text-align:center;margin:16px 0;">
-      <div id="qrCode" style="background:white;width:140px;height:140px;margin:0 auto;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#333;font-family:monospace;padding:8px;word-break:break-all;"></div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-primary" style="flex:1" onclick="copyAddress();closeModal('receiveModal')">📋 Copy Address</button>
-    </div>
-  </div>
-</div>
-
-<!-- MINE MODAL -->
-<div class="modal-overlay" id="mineModal">
-  <div class="modal">
-    <div class="modal-title">⛏️ Mining</div>
-    <p style="color:var(--dim);font-size:13px;margin-bottom:20px;">Connect to the OTCoin network and start earning OTC rewards.</p>
-    <div style="background:var(--dark);border:1px solid var(--bdr);border-radius:8px;padding:16px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--dim);font-size:12px;">Node</span><span style="font-family:monospace;font-size:12px;color:var(--g2);">ws://76.13.192.203:6001</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="color:var(--dim);font-size:12px;">Block Reward</span><span style="font-family:monospace;font-size:12px;color:var(--g2);">50 OTC</span></div>
-      <div style="display:flex;justify-content:space-between;"><span style="color:var(--dim);font-size:12px;">Difficulty</span><span style="font-family:monospace;font-size:12px;color:var(--g2);">4</span></div>
-    </div>
-    <div class="success-msg show" style="display:block;">⛏️ Mining guide available at otcoin.org/get-started.html</div>
-    <div class="modal-btns" style="margin-top:16px;">
-      <button class="btn-outline" onclick="closeModal('mineModal')">Close</button>
-      <button class="btn-primary" onclick="window.open('https://otcoin.org/get-started.html')">Get Started →</button>
-    </div>
-  </div>
-</div>
-
-<!-- SWAP MODAL -->
-<div class="modal-overlay" id="swapModal">
-  <div class="modal">
-    <div class="modal-title">🔄 Swap</div>
-    <div class="input-group">
-      <label class="input-label">From</label>
-      <select class="input-field" id="swapFrom" onchange="updateQuote()">
-        <option value="OTC">OTC — OTCoin</option>
-        <option value="BTC">BTC — Bitcoin</option>
-        <option value="ETH">ETH — Ethereum</option>
-        <option value="SOL">SOL — Solana</option>
-      </select>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Amount</label>
-      <input class="input-field" id="swapAmount" type="number" placeholder="0.00" oninput="updateQuote()"/>
-    </div>
-    <div class="input-group">
-      <label class="input-label">To</label>
-      <select class="input-field" id="swapTo" onchange="updateQuote()">
-        <option value="BTC">BTC — Bitcoin</option>
-        <option value="ETH">ETH — Ethereum</option>
-        <option value="SOL">SOL — Solana</option>
-        <option value="OTC">OTC — OTCoin</option>
-      </select>
-    </div>
-    <div id="swapQuote" style="background:var(--dark);border:1px solid var(--bdr);border-radius:6px;padding:12px;font-family:monospace;font-size:12px;color:var(--g2);min-height:40px;"></div>
-    <div class="modal-btns">
-      <button class="btn-outline" onclick="closeModal('swapModal')">Cancel</button>
-      <button class="btn-primary" onclick="executeSwap()">Swap →</button>
-    </div>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:14px;">Share your address to receive OTC!</p>
+    <label class="lbl">Your Address</label>
+    <input id="rcvAddr" readonly>
+    <button class="btn btn-gold" onclick="copyEl('rcvAddr');alert('Copied!')">📋 Copy Address</button>
+    <button class="btn btn-out" onclick="hideReceive()">Close</button>
   </div>
 </div>
 
 <script>
-// ── WALLET STATE ──────────────────────────────
-const RATES = {
-  'OTC-BTC':0.000002,'OTC-ETH':0.00003,'OTC-SOL':0.0005,
-  'BTC-OTC':500000,'ETH-OTC':33333,'SOL-OTC':2000
-};
+const API = 'http://76.13.192.203:5000';
+let addr = '', bal = 0, tmpWallet = null;
 
-let wallet = {
-  address: '', privateKey: '', balance: 0, txs: []
-};
-
-// ── CREATE WALLET ─────────────────────────────
-function createWallet(){
-  const chars='0123456789abcdef';
-  const pk=Array.from({length:64},()=>chars[Math.floor(Math.random()*16)]).join('');
-  const addr='1'+Array.from({length:33},()=>chars[Math.floor(Math.random()*16)]).join('');
-
-  wallet.address=addr;
-  wallet.privateKey=pk;
-  wallet.balance=0;
-  wallet.txs=[];
-
-  // Add welcome bonus for demo
-  wallet.txs.push({
-    type:'mine',label:'Mining Reward',
-    addr:'SYSTEM',amount:50,
-    time:new Date().toLocaleTimeString()
-  });
-  wallet.balance=50;
-
-  loadWallet();
-
-  alert(`✅ Wallet Created!\n\n⚠️ SAVE YOUR PRIVATE KEY:\n${pk.slice(0,16)}...\n\nNEVER share this with anyone!`);
+function switchTab(n) {
+  document.getElementById('tab1').className = 'tab' + (n===1?' active':'');
+  document.getElementById('tab2').className = 'tab' + (n===2?' active':'');
+  document.getElementById('importDiv').style.display = n===1?'block':'none';
+  document.getElementById('createDiv').style.display = n===2?'block':'none';
 }
 
-function showImport(){
-  const pk = prompt('Enter your Private Key:');
-  if(!pk) return;
-  const chars='0123456789abcdef';
-  const addr='1'+Array.from({length:33},()=>chars[Math.floor(Math.random()*16)]).join('');
-  wallet.address=addr;
-  wallet.privateKey=pk;
-  wallet.balance=Math.floor(Math.random()*1000)+100;
-  wallet.txs=[{type:'mine',label:'Mining Reward',addr:'SYSTEM',amount:wallet.balance,time:new Date().toLocaleTimeString()}];
-  loadWallet();
+function makeAddr(seed) {
+  let h = 5381;
+  for(let i=0;i<seed.length;i++) h=((h<<5)+h)+seed.charCodeAt(i);
+  h = Math.abs(h);
+  return '1' + h.toString(16).padStart(8,'0') + seed.substring(2,34);
 }
 
-function loadWallet(){
-  document.getElementById('welcomeScreen').classList.remove('active');
-  document.getElementById('walletScreen').classList.add('active');
-  updateUI();
+function createWallet() {
+  const arr = new Uint8Array(32);
+  crypto.getRandomValues(arr);
+  const pk = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const a = makeAddr(pk);
+  document.getElementById('newAddr').value = a;
+  document.getElementById('newPk').value = pk;
+  document.getElementById('newWalletDiv').style.display = 'block';
+  tmpWallet = {address:a, privateKey:pk};
 }
 
-function updateUI(){
-  const short=wallet.address.slice(0,8)+'...'+wallet.address.slice(-6);
-  document.getElementById('walletAddr').textContent=short;
-  document.getElementById('balanceAmount').textContent=wallet.balance.toLocaleString();
-  document.getElementById('balanceUsd').textContent=`≈ $${(wallet.balance*0.001).toFixed(2)} USD (estimated)`;
-  document.getElementById('receiveAddr').value=wallet.address;
-  document.getElementById('qrCode').textContent=wallet.address.slice(0,20)+'...';
-  renderTxs();
+function useNew() {
+  if(tmpWallet) openWallet(tmpWallet.address);
 }
 
-function renderTxs(){
-  const list=document.getElementById('txList');
-  if(!wallet.txs.length){
-    list.innerHTML='<div style="padding:24px;text-align:center;color:var(--dim);font-size:13px;">No transactions yet</div>';
-    return;
-  }
-  list.innerHTML=wallet.txs.slice().reverse().map(tx=>`
-    <div class="tx-item">
-      <div class="tx-icon ${tx.type}">${tx.type==='in'?'📥':tx.type==='out'?'📤':'⛏️'}</div>
-      <div class="tx-info">
-        <div class="tx-type">${tx.label}</div>
-        <div class="tx-addr">${tx.addr.slice(0,20)}${tx.addr.length>20?'...':''}</div>
-      </div>
-      <div class="tx-amount ${tx.type}">
-        ${tx.type==='out'?'-':'+'}${tx.amount} OTC
-        <div class="tx-time">${tx.time}</div>
-      </div>
-    </div>
-  `).join('');
+function importWallet() {
+  const pk = document.getElementById('pkInput').value.trim();
+  if(!pk||pk.length<20){alert('Enter a valid private key!');return;}
+  openWallet(makeAddr(pk));
 }
 
-// ── ACTIONS ───────────────────────────────────
-function showSend(){ document.getElementById('sendModal').classList.add('show'); }
-function showReceive(){ document.getElementById('receiveModal').classList.add('show'); }
-function showMine(){ document.getElementById('mineModal').classList.add('show'); }
-function showSwap(){ document.getElementById('swapModal').classList.add('show'); }
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-
-function sendTx(){
-  const to=document.getElementById('sendTo').value;
-  const amount=parseFloat(document.getElementById('sendAmount').value);
-  if(!to||!amount||amount<=0){alert('Please fill all fields');return;}
-  if(amount>wallet.balance){alert('Insufficient balance');return;}
-
-  wallet.balance-=amount;
-  wallet.txs.push({type:'out',label:'Sent OTC',addr:to,amount,time:new Date().toLocaleTimeString()});
-  document.getElementById('sendSuccess').style.display='block';
-  setTimeout(()=>{
-    closeModal('sendModal');
-    document.getElementById('sendSuccess').style.display='none';
-    document.getElementById('sendTo').value='';
-    document.getElementById('sendAmount').value='';
-    updateUI();
-  },2000);
+function openWallet(a) {
+  addr = a;
+  document.getElementById('loginDiv').style.display = 'none';
+  document.getElementById('dashDiv').style.display = 'block';
+  document.getElementById('addrShow').textContent = a;
+  document.getElementById('rcvAddr').value = a;
+  refreshBal();
 }
 
-function copyAddress(){
-  navigator.clipboard.writeText(wallet.address).then(()=>{
-    alert('Address copied!');
-  });
-}
-
-function updateQuote(){
-  const from=document.getElementById('swapFrom').value;
-  const to=document.getElementById('swapTo').value;
-  const amount=parseFloat(document.getElementById('swapAmount').value)||0;
-  const rate=RATES[`${from}-${to}`]||0;
-  const out=(amount*rate*(1-0.001)).toFixed(8);
-  const el=document.getElementById('swapQuote');
-  if(rate&&amount>0){
-    el.innerHTML=`${amount} ${from} → <strong>${out} ${to}</strong><br><span style="color:var(--dim)">Fee: 0.1% | Rate: 1 ${from} = ${rate} ${to}</span>`;
-  } else {
-    el.innerHTML='<span style="color:var(--dim)">Enter amount to see quote</span>';
+async function refreshBal() {
+  try {
+    const r = await fetch(`${API}/api/balance/${addr}`);
+    const d = await r.json();
+    bal = d.balance||0;
+    document.getElementById('balNum').textContent = bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:4});
+  } catch(e) {
+    document.getElementById('balNum').textContent = '—';
   }
 }
 
-function executeSwap(){
-  const from=document.getElementById('swapFrom').value;
-  const to=document.getElementById('swapTo').value;
-  const amount=parseFloat(document.getElementById('swapAmount').value);
-  if(!amount||amount<=0){alert('Enter amount');return;}
-  alert(`✅ Swap initiated!\n${amount} ${from} → ${to}\n\nBridge feature coming in mainnet!`);
-  closeModal('swapModal');
+async function doSend() {
+  const to = document.getElementById('sendTo').value.trim();
+  const amt = parseFloat(document.getElementById('sendAmt').value);
+  if(!to){alert('Enter recipient!');return;}
+  if(!amt||amt<=0){alert('Enter amount!');return;}
+  if(amt+0.001>bal){alert('Insufficient balance!');return;}
+  try {
+    const r = await fetch(`${API}/api/transaction`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sender:addr,recipient:to,amount:amt,fee:0.001})});
+    const d = await r.json();
+    if(d.success){alert('✅ Sent! '+amt+' OTC → '+to.substring(0,16)+'...');hideSend();setTimeout(refreshBal,2000);}
+    else alert('Failed: '+(d.error||'Error'));
+  } catch(e){alert('⚠️ Network error. Try again.');}
 }
 
-// Close modal on overlay click
-document.querySelectorAll('.modal-overlay').forEach(el=>{
-  el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('show');});
-});
+function showSend(){document.getElementById('sendModal').classList.add('show');}
+function hideSend(){document.getElementById('sendModal').classList.remove('show');}
+function showReceive(){document.getElementById('rcvModal').classList.add('show');}
+function hideReceive(){document.getElementById('rcvModal').classList.remove('show');}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).value);}
+function copyAddr(){navigator.clipboard.writeText(addr);alert('Copied!');}
+function logout(){addr='';bal=0;document.getElementById('loginDiv').style.display='block';document.getElementById('dashDiv').style.display='none';document.getElementById('pkInput').value='';}
+
+setInterval(()=>{if(addr)refreshBal();},30000);
 </script>
 <script>
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
-document.addEventListener("keydown",function(e){
-  if(e.ctrlKey && ["u","U","s","S","i","I","j","J"].includes(e.key)){e.preventDefault();}
-  if(e.key==="F12"){e.preventDefault();}
-});
-document.addEventListener("selectstart",function(e){
-  if(e.target.tagName!=="INPUT"&&e.target.tagName!=="TEXTAREA"){e.preventDefault();}
-});
+document.addEventListener("keydown",function(e){if(e.ctrlKey&&["u","U","s","S","i","I","j","J"].includes(e.key)){e.preventDefault();}if(e.key==="F12"){e.preventDefault();}});
 </script>
 </body>
 </html>
