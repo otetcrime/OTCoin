@@ -439,15 +439,81 @@ function addNewBlock(){
   renderTxs();
 }
 
+// ── REAL API ──────────────────────────────────
+const API = 'http://76.13.192.203:8080';
+let lastBlockIndex = 0;
+
+function fetchRealData(){
+  // Fetch stats
+  fetch(API + '/api/stats')
+    .then(r => r.json())
+    .then(d => {
+      totalMined = d.total_mined || 0;
+      const difficulty = d.difficulty || 5;
+      document.getElementById('totalBlocks').textContent = (d.total_blocks||0).toLocaleString();
+      document.getElementById('totalMined').textContent = totalMined.toLocaleString() + ' OTC';
+      const pct = (totalMined/TOTAL_SUPPLY*100).toFixed(4);
+      document.getElementById('supplyFill').style.width = pct + '%';
+
+      // Cek ada blok baru
+      if(d.latest_index > lastBlockIndex && lastBlockIndex > 0){
+        // Tambah blok baru ke list
+        const newBlock = {
+          index: d.latest_index,
+          hash: d.latest_hash,
+          prevHash: '...',
+          txs: [{hash: randHash(16), sender:'SYSTEM', recipient:MINER, amount:d.block_reward, type:'COINBASE', block:d.latest_index}],
+          miner: MINER,
+          reward: d.block_reward,
+          nonce: Math.floor(Math.random()*200000),
+          timestamp: Date.now()/1000,
+          difficulty: difficulty
+        };
+        blocks.push(newBlock);
+        allTxs.push(newBlock.txs[0]);
+        if(blocks.length > 50) blocks.shift();
+      }
+      lastBlockIndex = d.latest_index || 0;
+      renderBlocks();
+      renderTxs();
+      renderMiners();
+    })
+    .catch(() => {
+      // Fallback ke simulasi kalau API tidak bisa diakses
+    });
+
+  // Fetch transactions
+  fetch(API + '/api/transactions/' + MINER)
+    .then(r => r.json())
+    .then(d => {
+      if(d.transactions && d.transactions.length > 0){
+        allTxs = d.transactions.map(tx => ({
+          hash: tx.tx_id,
+          sender: tx.sender,
+          recipient: tx.recipient,
+          amount: tx.amount,
+          type: tx.sender === 'SYSTEM' ? 'COINBASE' : 'TRANSFER',
+          block: tx.block
+        }));
+        document.getElementById('totalTxs').textContent = allTxs.length.toLocaleString();
+        renderTxs();
+      }
+    })
+    .catch(() => {});
+}
+
 // ── INIT ──────────────────────────────────────
-generateBlocks(20);
+generateBlocks(5);
 renderStats();
 renderBlocks();
 renderTxs();
 renderMiners();
 
+// Fetch real data
+fetchRealData();
+
 // Auto update setiap 10 detik
-setInterval(addNewBlock, 10000);
+setInterval(fetchRealData, 10000);
 </script>
 <script>
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
