@@ -8,10 +8,20 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><circle cx='50' cy='50' r='38' stroke='rgba(255,209,102,0.4)' stroke-width='2' fill='none'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' letter-spacing='1' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap');
-:root{--g1:#FFD166;--g2:#F4A717;--g3:#C97B00;--void:#03030A;--dark:#07080F;--surf:#0C0D17;--bdr:rgba(244,167,23,0.1);--txt:#E8E8F0;--dim:#5A5C78;}
-*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+
+:root{
+  --g1:#FFD166;--g2:#F4A717;--g3:#C97B00;
+  --void:#03030A;--dark:#07080F;--surf:#0C0D17;
+  --bdr:rgba(244,167,23,0.1);
+  --txt:#E8E8F0;--dim:#5A5C78;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
 body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);overflow-x:hidden;}
+
 #networkCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 56px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,3,10,0.65);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
 .nlogo{display:flex;align-items:center;gap:12px;}
 .nlogo-txt{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:5px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -21,16 +31,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 56px;display:fl
 .nlaunch{padding:10px 28px;background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .3s;box-shadow:0 4px 20px rgba(244,167,23,.2);}
 .nlaunch:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(244,167,23,.35);}
 
-/* LANGUAGE SELECTOR */
-.lang-selector{position:relative;display:flex;align-items:center;gap:8px;}
-.lang-btn{background:rgba(244,167,23,0.08);border:1px solid rgba(244,167,23,0.2);color:var(--g2);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:11px;font-family:'Tenor Sans',sans-serif;letter-spacing:1px;display:flex;align-items:center;gap:6px;}
-.lang-btn:hover{background:rgba(244,167,23,0.15);}
-.lang-dropdown{display:none;position:absolute;top:100%;right:0;margin-top:8px;background:var(--dark);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;z-index:999;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
-.lang-dropdown.show{display:block;}
-.lang-option{padding:10px 16px;font-size:12px;cursor:pointer;color:var(--dim);transition:all .2s;display:flex;align-items:center;gap:8px;}
-.lang-option:hover{background:rgba(244,167,23,0.08);color:var(--g2);}
-.lang-option.active{color:var(--g2);background:rgba(244,167,23,0.05);}
-
+/* HERO */
 .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 56px 80px;position:relative;z-index:1;gap:48px;max-width:1300px;margin:0 auto;}
 .hleft{max-width:580px;}
 .htag{display:inline-flex;align-items:center;gap:8px;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--g3);border:1px solid rgba(201,123,0,.25);padding:7px 18px;margin-bottom:36px;animation:fadeUp 1s .2s ease both;}
@@ -44,35 +45,70 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 56px;display:fl
 .bm:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(244,167,23,.4);}
 .bg{padding:15px 44px;border:1px solid rgba(244,167,23,.25);color:var(--g2);font-size:12px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .3s;background:rgba(244,167,23,.03);}
 .bg:hover{border-color:var(--g2);background:rgba(244,167,23,.08);}
+
+/* COIN RIGHT */
 .hright{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;animation:fadeUp 1s .4s ease both;}
 .cwrap{position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center;}
 .cglow{position:absolute;inset:-40px;background:radial-gradient(ellipse,rgba(244,167,23,.12) 0%,transparent 70%);animation:pulseG 4s ease-in-out infinite;}
 @keyframes pulseG{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
+.mcoin{width:260px;height:260px;animation:floatC 6s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(244,167,23,.25)) drop-shadow(0 20px 40px rgba(0,0,0,.6));}
+@keyframes floatC{0%,100%{transform:translateY(0) rotateY(0deg);}35%{transform:translateY(-14px) rotateY(8deg);}70%{transform:translateY(-6px) rotateY(-4deg);}}
+
+/* Orbiting badges */
+.oring{position:absolute;width:100%;height:100%;animation:oSpin 18s linear infinite;}
+@keyframes oSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.obadge{position:absolute;width:46px;height:46px;border-radius:50%;background:rgba(7,8,15,.92);border:1px solid rgba(244,167,23,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--g1);font-family:'Cormorant Garamond',serif;box-shadow:0 0 12px rgba(244,167,23,.15);}
+.ob1{top:-23px;left:calc(50% - 23px);animation:cSpin 18s linear infinite;}
+.ob2{right:-23px;top:calc(50% - 23px);animation:cSpin 18s linear infinite;}
+.ob3{bottom:-23px;left:calc(50% - 23px);animation:cSpin 18s linear infinite;}
+.ob4{left:-23px;top:calc(50% - 23px);animation:cSpin 18s linear infinite;}
+@keyframes cSpin{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+
 .clabel{margin-top:32px;text-align:center;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:2px;color:var(--dim);}
 .cpills{display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap;}
 .cpill{padding:4px 14px;border:1px solid rgba(244,167,23,.15);border-radius:99px;font-size:10px;letter-spacing:2px;color:var(--dim);transition:all .3s;}
 .cpill:hover{border-color:rgba(244,167,23,.4);color:var(--g2);}
+
+/* STATS */
 .stats{position:relative;z-index:1;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);background:rgba(7,8,15,.7);backdrop-filter:blur(12px);padding:28px 56px;display:flex;justify-content:center;gap:0;}
 .stat{flex:1;max-width:240px;text-align:center;padding:0 40px;border-right:1px solid var(--bdr);}
 .stat:last-child{border-right:none;}
 .sn{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
 .sl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);}
+
+/* SECTIONS */
 .sec{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:120px 56px;}
 .stag{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--g3);margin-bottom:16px;display:block;}
 .stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,54px);font-weight:300;letter-spacing:4px;margin-bottom:16px;line-height:1.1;}
 .stitle .a{background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;}
 .ssub{font-size:15px;color:var(--dim);max-width:520px;line-height:1.9;margin-bottom:64px;}
+
+/* FEATURES */
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--bdr);border:1px solid var(--bdr);}
 .feat{background:var(--dark);padding:44px 36px;transition:background .3s;}
 .feat:hover{background:#0A0B16;}
 .fi{font-size:28px;margin-bottom:20px;display:block;}
 .ft{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;letter-spacing:2px;color:var(--g1);margin-bottom:12px;}
 .fd{font-size:13px;color:var(--dim);line-height:1.9;}
+
+/* CHAINS */
+.cwsec{position:relative;z-index:1;background:var(--surf);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:100px 56px;text-align:center;}
+.cflow{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:56px;}
+.cnode{width:130px;padding:28px 16px;border:1px solid rgba(244,167,23,.15);background:var(--void);text-align:center;transition:all .3s;cursor:default;}
+.cnode:hover{border-color:rgba(244,167,23,.4);transform:translateY(-4px);box-shadow:0 8px 24px rgba(244,167,23,.08);}
+.cnode.otc{border-color:rgba(244,167,23,.4);background:rgba(244,167,23,.04);}
+.csym{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;display:block;}
+.cnam{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);}
+.carr{font-size:18px;color:rgba(244,167,23,.3);}
+
+/* TOKENOMICS */
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);}
 .titem{background:var(--dark);padding:36px;transition:background .3s;}
 .titem:hover{background:#0A0B16;}
 .tl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;display:block;}
 .tv{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ROADMAP */
 .road{position:relative;padding-left:28px;}
 .road::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--g2),transparent);}
 .ri{position:relative;padding:0 0 44px 40px;}
@@ -87,6 +123,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 56px;display:fl
 .rlist li::before{content:'— ';color:rgba(244,167,23,.3);}
 .rlist li.d{color:var(--g3);}
 .rlist li.d::before{content:'✓ ';color:var(--g2);}
+
+/* FOOTER */
 footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 56px 36px;text-align:center;}
 .flogo{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;letter-spacing:14px;background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
 .ftag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--dim);margin-bottom:36px;}
@@ -94,24 +132,42 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 
 .flinks a{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .3s;}
 .flinks a:hover{color:var(--g2);}
 .fcopy{font-family:'Fira Code',monospace;font-size:10px;color:rgba(90,92,120,.5);letter-spacing:1px;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
 @media(max-width:900px){
   .hero{grid-template-columns:1fr;padding:100px 24px 60px;text-align:center;}
-  .hleft{max-width:100%;}.hdesc{max-width:100%;}.hbtns{justify-content:center;}.hright{display:none;}
-  nav{padding:16px 24px;}.nlinks{display:none;}.sec{padding:80px 24px;}
-  .stats{padding:24px;flex-wrap:wrap;}.stat{min-width:50%;border-right:none;padding:16px;border-bottom:1px solid var(--bdr);}
-  .tgrid{grid-template-columns:1fr 1fr;}.fcopy{padding:0 16px;}
+  .hleft{max-width:100%;}
+  .hdesc{max-width:100%;}
+  .hbtns{justify-content:center;}
+  .hright{display:none;}
+  nav{padding:16px 24px;}
+  .nlinks{display:none;}
+  .sec{padding:80px 24px;}
+  .stats{padding:24px;flex-wrap:wrap;}
+  .stat{min-width:50%;border-right:none;padding:16px;border-bottom:1px solid var(--bdr);}
+  .tgrid{grid-template-columns:1fr 1fr;}
+  .cwsec{padding:80px 24px;}
   footer{padding:48px 24px 32px;}
 }
 </style>
 </head>
 <body>
+
 <canvas id="networkCanvas"></canvas>
+
+<!-- NAV -->
 <nav>
   <div class="nlogo">
     <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-      <defs><linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD166"/><stop offset="100%" stop-color="#C97B00"/></linearGradient></defs>
-      <circle cx="22" cy="22" r="21" fill="url(#ng)"/><circle cx="22" cy="22" r="17" fill="#060610"/>
+      <defs>
+        <linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFD166"/>
+          <stop offset="100%" stop-color="#C97B00"/>
+        </linearGradient>
+      </defs>
+      <circle cx="22" cy="22" r="21" fill="url(#ng)"/>
+      <circle cx="22" cy="22" r="17" fill="#060610"/>
       <circle cx="22" cy="22" r="17" stroke="rgba(255,209,102,0.4)" stroke-width="1.5" fill="none"/>
       <text x="22" y="25" font-family="Georgia,serif" font-size="10" font-weight="bold" letter-spacing="1" text-anchor="middle" fill="url(#ng)">OTC</text>
       <text x="22" y="33" font-family="Georgia,serif" font-size="5" letter-spacing="3" text-anchor="middle" fill="#C97B00">COIN</text>
@@ -119,79 +175,79 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 
     <span class="nlogo-txt">OTCOIN</span>
   </div>
   <ul class="nlinks">
-    <li><a href="#feat" data-i18n="nav_vision">Vision</a></li>
-    <li><a href="#tok" data-i18n="nav_tokenomics">Tokenomics</a></li>
-    <li><a href="#road" data-i18n="nav_roadmap">Roadmap</a></li>
+    <li><a href="#feat">Vision</a></li>
+    <li><a href="#tok">Tokenomics</a></li>
+    <li><a href="#road">Roadmap</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:16px;">
-    <div class="lang-selector">
-      <button class="lang-btn" onclick="toggleLang()">🌐 <span id="currentLang">EN</span> ▾</button>
-      <div class="lang-dropdown" id="langDropdown">
-        <div class="lang-option active" onclick="setLang('en')">🇺🇸 English</div>
-        <div class="lang-option" onclick="setLang('id')">🇮🇩 Indonesia</div>
-        <div class="lang-option" onclick="setLang('ms')">🇲🇾 Melayu</div>
-        <div class="lang-option" onclick="setLang('zh')">🇨🇳 中文</div>
-        <div class="lang-option" onclick="setLang('ja')">🇯🇵 日本語</div>
-        <div class="lang-option" onclick="setLang('ko')">🇰🇷 한국어</div>
-        <div class="lang-option" onclick="setLang('es')">🇪🇸 Español</div>
-        <div class="lang-option" onclick="setLang('fr')">🇫🇷 Français</div>
-        <div class="lang-option" onclick="setLang('ar')">🇸🇦 العربية</div>
-        <div class="lang-option" onclick="setLang('ru')">🇷🇺 Русский</div>
-        <div class="lang-option" onclick="setLang('ph')">🇵🇭 Filipino</div>
-      </div>
-    </div>
-    <a href="https://github.com/OTCoinFoundation/OTCoin" target="_blank" class="nlaunch">GitHub →</a>
-  </div>
+  <a href="https://github.com/OTCoinFoundation/OTCoin" target="_blank" class="nlaunch">GitHub →</a>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <div class="hleft">
-    <div class="htag"><span class="dot"></span> <span data-i18n="hero_tag">Independent Blockchain Network</span></div>
-    <h1>One Transaction.<br><span class="g" data-i18n="hero_title">All Chains.</span></h1>
-    <p class="hdesc" data-i18n="hero_desc">The next generation of decentralized finance. OTCoin is a sovereign, independent blockchain built for speed, security, and true financial freedom. Your coin. Your rules. Your future.</p>
+    <div class="htag"><span class="dot"></span> Independent Blockchain Network</div>
+    <h1>One Transaction.<br><span class="g">All Chains.</span></h1>
+    <p class="hdesc">The next generation of decentralized finance. OTCoin is a sovereign, independent blockchain built for speed, security, and true financial freedom. Your coin. Your rules. Your future.</p>
     <div class="hbtns">
-      <a href="get-started.html" class="bm" data-i18n="btn_started">Get Started →</a>
-      <a href="https://github.com/OTCoinFoundation/OTCoin/releases/download/v1.0.0/OTCoin-Miner.exe" class="bm" style="background:linear-gradient(135deg,#00C896,#007A5C);color:#fff;box-shadow:none;" data-i18n="btn_miner">⬇️ Download Miner</a>
-      <a href="http://76.13.192.203/explorer.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">🔍 Explorer</a>
+      <a href="get-started.html" class="bm">Get Started →</a>
+      <a href="https://github.com/OTCoinFoundation/OTCoin/releases/download/v1.0.0/OTCoin-Miner.exe" class="bm" style="background:linear-gradient(135deg,#00C896,#007A5C);color:#fff;box-shadow:none;">⬇️ Download Miner</a>
+      <a href="explorer.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">🔍 Explorer</a>
       <a href="http://76.13.192.203/wallet.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">👛 Web Wallet</a>
-      <a href="http://76.13.192.203/dashboard.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">📊 Dashboard</a>
+      <a href="dashboard.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">📊 Dashboard</a>
       <a href="roadmap.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">📈 Roadmap</a>
       <a href="OTCoin-Whitepaper-v2.0-EN.docx" download class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">📄 Whitepaper</a>
       <a href="build.html" class="bm" style="background:transparent;border:1px solid rgba(244,167,23,0.3);color:#F4A717;box-shadow:none;">🛠️ Build</a>
       <a href="run-node.html" class="bm" style="background:transparent;border:1px solid rgba(0,200,150,0.4);color:#00C896;box-shadow:none;">🌐 Run a Node</a>
-      <a href="http://76.13.192.203/store.html" class="bm" style="background:linear-gradient(135deg,#9B59B6,#6C3483);color:#fff;box-shadow:none;">🛒 OTC Store</a>
-      <a href="#feat" class="bg" data-i18n="btn_learn">Learn More</a>
+      <a href="#feat" class="bg">Learn More</a>
     </div>
   </div>
+
   <div class="hright">
     <div class="cwrap">
       <div class="cglow"></div>
       <svg viewBox="0 0 300 300" width="300" height="300" style="display:block;margin:0 auto;filter:drop-shadow(0 0 40px rgba(244,167,23,0.3));">
         <defs>
-          <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD166"/><stop offset="50%" stop-color="#F4A717"/><stop offset="100%" stop-color="#C97B00"/></linearGradient>
-          <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F4A717" stop-opacity="0.15"/><stop offset="100%" stop-color="#F4A717" stop-opacity="0"/></radialGradient>
+          <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFD166"/>
+            <stop offset="50%" stop-color="#F4A717"/>
+            <stop offset="100%" stop-color="#C97B00"/>
+          </linearGradient>
+          <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#F4A717" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#F4A717" stop-opacity="0"/>
+          </radialGradient>
         </defs>
+        <!-- Glow -->
         <circle cx="150" cy="150" r="148" fill="url(#logoGlow)"/>
+        <!-- Orbit rings -->
         <circle cx="150" cy="150" r="145" fill="none" stroke="#F4A717" stroke-width="0.8" stroke-opacity="0.15" stroke-dasharray="6,10"/>
         <circle cx="150" cy="150" r="125" fill="none" stroke="#F4A717" stroke-width="0.8" stroke-opacity="0.2" stroke-dasharray="3,8"/>
-        <circle cx="150" cy="5" r="5" fill="#FFD166"/><circle cx="150" cy="295" r="5" fill="#FFD166"/>
-        <circle cx="5" cy="150" r="5" fill="#FFD166"/><circle cx="295" cy="150" r="5" fill="#FFD166"/>
+        <!-- Orbit dots -->
+        <circle cx="150" cy="5" r="5" fill="#FFD166"/>
+        <circle cx="150" cy="295" r="5" fill="#FFD166"/>
+        <circle cx="5" cy="150" r="5" fill="#FFD166"/>
+        <circle cx="295" cy="150" r="5" fill="#FFD166"/>
+        <!-- Main coin -->
         <circle cx="150" cy="150" r="110" fill="url(#logoGold)"/>
         <circle cx="153" cy="153" r="108" fill="#8B5500" opacity="0.2"/>
         <circle cx="150" cy="150" r="108" fill="#0A0600"/>
         <circle cx="150" cy="150" r="105" fill="url(#logoGold)" opacity="0.08"/>
         <circle cx="150" cy="150" r="96" fill="none" stroke="url(#logoGold)" stroke-width="2"/>
         <circle cx="150" cy="150" r="90" fill="#060400"/>
+        <!-- Shimmer -->
         <ellipse cx="125" cy="122" rx="32" ry="18" fill="white" opacity="0.05" transform="rotate(-30 125 122)"/>
+        <!-- OTC Text -->
         <text x="150" y="140" font-family="Georgia,serif" font-size="46" font-weight="bold" text-anchor="middle" fill="url(#logoGold)" letter-spacing="3">OTC</text>
         <text x="150" y="168" font-family="Georgia,serif" font-size="14" text-anchor="middle" fill="#C97B00" letter-spacing="7">COIN</text>
+        <!-- Small stars -->
         <circle cx="240" cy="65" r="2.5" fill="#FFD166" opacity="0.6"/>
         <circle cx="60" cy="235" r="2" fill="#FFD166" opacity="0.4"/>
         <circle cx="255" cy="235" r="2" fill="#FFD166" opacity="0.5"/>
         <circle cx="45" cy="65" r="1.5" fill="#FFD166" opacity="0.4"/>
       </svg>
+
     </div>
-    <div class="clabel" data-i18n="join_community">JOIN THE COMMUNITY</div>
+    <div class="clabel">JOIN THE COMMUNITY</div>
     <div class="cpills">
       <a href="https://t.me/+MGYkB80BhlwzNGQ1" target="_blank" class="cpill" style="text-decoration:none;">📱 Telegram</a>
       <a href="https://x.com/OTCoinOfficial" target="_blank" class="cpill" style="text-decoration:none;">🐦 Twitter/X</a>
@@ -199,89 +255,96 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 
   </div>
 </div>
 
+<!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="sn">51,000,000</div><div class="sl" data-i18n="stat_supply">Total Supply OTC</div></div>
-  <div class="stat"><div class="sn">50</div><div class="sl" data-i18n="stat_reward">Block Reward</div></div>
-  <div class="stat"><div class="sn">SHA-256</div><div class="sl" data-i18n="stat_algo">Algorithm</div></div>
-  <div class="stat"><div class="sn">PoW</div><div class="sl" data-i18n="stat_consensus">Consensus</div></div>
+  <div class="stat"><div class="sn">51,000,000</div><div class="sl">Total Supply OTC</div></div>
+  <div class="stat"><div class="sn">50</div><div class="sl">Block Reward</div></div>
+  <div class="stat"><div class="sn">SHA-256</div><div class="sl">Algorithm</div></div>
+  <div class="stat"><div class="sn">PoW</div><div class="sl">Consensus</div></div>
 </div>
 
+<!-- FEATURES -->
 <div class="sec" id="feat">
-  <span class="stag" data-i18n="vision_tag">// Our Vision</span>
-  <h2 class="stitle"><span data-i18n="vision_title">Built for the</span> <span class="a" data-i18n="vision_title2">Borderless</span> <span data-i18n="vision_title3">Economy</span></h2>
-  <p class="ssub" data-i18n="vision_sub">One sovereign blockchain. Four connected ecosystems. Unlimited potential.</p>
+  <span class="stag">// Our Vision</span>
+  <h2 class="stitle">Built for the <span class="a">Borderless</span> Economy</h2>
+  <p class="ssub">One sovereign blockchain. Four connected ecosystems. Unlimited potential.</p>
   <div class="fgrid">
-    <div class="feat"><span class="fi">⛓️</span><div class="ft" data-i18n="feat1_title">Independent Chain</div><p class="fd" data-i18n="feat1_desc">OTCoin runs on its own blockchain — not a token. Full sovereignty, proven Proof of Work security.</p></div>
-    <div class="feat"><span class="fi">🌉</span><div class="ft" data-i18n="feat2_title">Cross-Chain Bridge</div><p class="fd" data-i18n="feat2_desc">OTCoin is designed to bridge major blockchain ecosystems — send value anywhere with one OTC transaction.</p></div>
-    <div class="feat"><span class="fi">🔐</span><div class="ft" data-i18n="feat3_title">ECDSA Security</div><p class="fd" data-i18n="feat3_desc">secp256k1 cryptography — military-grade security protecting every OTC transaction.</p></div>
-    <div class="feat"><span class="fi">🌍</span><div class="ft" data-i18n="feat4_title">Fully Decentralized</div><p class="fd" data-i18n="feat4_desc">Anyone can run a node. Anyone can mine. OTCoin belongs to its community.</p></div>
+    <div class="feat"><span class="fi">⛓️</span><div class="ft">Independent Chain</div><p class="fd">OTCoin runs on its own blockchain — not a token. Full sovereignty, proven Proof of Work security.</p></div>
+    <div class="feat"><span class="fi">🌉</span><div class="ft">Cross-Chain Bridge</div><p class="fd">OTCoin is designed to bridge major blockchain ecosystems — send value anywhere with one OTC transaction. No wrappers. No complexity.</p></div>
+    <div class="feat"><span class="fi">🔐</span><div class="ft">ECDSA Security</div><p class="fd">secp256k1 cryptography — military-grade security protecting every OTC transaction.</p></div>
+    <div class="feat"><span class="fi">🌍</span><div class="ft">Fully Decentralized</div><p class="fd">Anyone can run a node. Anyone can mine. OTCoin belongs to its community.</p></div>
   </div>
 </div>
 
+
+
+<!-- TOKENOMICS -->
 <div class="sec" id="tok">
-  <span class="stag" data-i18n="tok_tag">// Tokenomics</span>
-  <h2 class="stitle"><span data-i18n="tok_title">Designed for</span> <span class="a" data-i18n="tok_title2">Scarcity</span></h2>
-  <p class="ssub" data-i18n="tok_sub">Hard-capped at 51,000,000 OTC. No inflation. Pure mathematical certainty.</p>
+  <span class="stag">// Tokenomics</span>
+  <h2 class="stitle">Designed for <span class="a">Scarcity</span></h2>
+  <p class="ssub">Hard-capped at 51,000,000 OTC. No inflation. Pure mathematical certainty.</p>
   <div class="tgrid">
-    <div class="titem"><span class="tl" data-i18n="tok_supply">Total Supply</span><div class="tv">51,000,000 OTC</div></div>
+    <div class="titem"><span class="tl">Total Supply</span><div class="tv">51,000,000 OTC</div></div>
     <div class="titem"><span class="tl">Ticker</span><div class="tv">OTC</div></div>
-    <div class="titem"><span class="tl" data-i18n="tok_reward">Block Reward</span><div class="tv">50 OTC</div></div>
-    <div class="titem"><span class="tl" data-i18n="tok_halving">Halving</span><div class="tv">Every 210K Blocks</div></div>
-    <div class="titem"><span class="tl" data-i18n="tok_consensus">Consensus</span><div class="tv">Proof of Work</div></div>
-    <div class="titem"><span class="tl" data-i18n="tok_algo">Algorithm</span><div class="tv">SHA-256</div></div>
+    <div class="titem"><span class="tl">Block Reward</span><div class="tv">50 OTC</div></div>
+    <div class="titem"><span class="tl">Halving</span><div class="tv">Every 210K Blocks</div></div>
+    <div class="titem"><span class="tl">Consensus</span><div class="tv">Proof of Work</div></div>
+    <div class="titem"><span class="tl">Algorithm</span><div class="tv">SHA-256</div></div>
   </div>
 </div>
 
+<!-- ROADMAP -->
 <div class="sec" id="road">
-  <span class="stag" data-i18n="road_tag">// Roadmap</span>
-  <h2 class="stitle"><span data-i18n="road_title">The Path</span> <span class="a" data-i18n="road_title2">Forward</span></h2>
-  <p class="ssub" data-i18n="road_sub">Transparent. Achievable. Community-driven.</p>
+  <span class="stag">// Roadmap</span>
+  <h2 class="stitle">The Path <span class="a">Forward</span></h2>
+  <p class="ssub">Transparent. Achievable. Community-driven.</p>
   <div class="road">
     <div class="ri done">
       <div class="rph">Phase 1 — Q1 2025</div>
-      <div class="rtit" data-i18n="phase1_title">Foundation</div>
+      <div class="rtit">Foundation</div>
       <ul class="rlist">
-        <li class="d" data-i18n="phase1_1">Blockchain core complete</li>
-        <li class="d" data-i18n="phase1_2">Wallet & ECDSA cryptography</li>
-        <li class="d" data-i18n="phase1_3">P2P network node</li>
-        <li class="d" data-i18n="phase1_4">Whitepaper published</li>
-        <li class="d" data-i18n="phase1_5">GitHub repository live</li>
+        <li class="d">Blockchain core complete</li>
+        <li class="d">Wallet & ECDSA cryptography</li>
+        <li class="d">P2P network node</li>
+        <li class="d">Whitepaper published</li>
+        <li class="d">GitHub repository live</li>
       </ul>
     </div>
     <div class="ri active">
       <div class="rph">Phase 2 — Q2–Q3 2025</div>
-      <div class="rtit" data-i18n="phase2_title">Testnet & Community</div>
+      <div class="rtit">Testnet & Community</div>
       <ul class="rlist">
-        <li data-i18n="phase2_1">Public testnet launch</li>
-        <li data-i18n="phase2_2">Bug bounty program</li>
-        <li data-i18n="phase2_3">Security audit</li>
-        <li data-i18n="phase2_4">Official website live</li>
-        <li data-i18n="phase2_5">Community building</li>
+        <li>Public testnet launch</li>
+        <li>Bug bounty program</li>
+        <li>Security audit</li>
+        <li>Official website live</li>
+        <li>Community building</li>
       </ul>
     </div>
     <div class="ri">
       <div class="rph">Phase 3 — Q4 2025</div>
-      <div class="rtit" data-i18n="phase3_title">Mainnet Launch</div>
+      <div class="rtit">Mainnet Launch</div>
       <ul class="rlist">
-        <li data-i18n="phase3_1">Genesis block</li>
-        <li data-i18n="phase3_2">Public mining opens</li>
-        <li data-i18n="phase3_3">Block explorer</li>
-        <li data-i18n="phase3_4">First DEX listing</li>
+        <li>Genesis block</li>
+        <li>Public mining opens</li>
+        <li>Block explorer</li>
+        <li>First DEX listing</li>
       </ul>
     </div>
     <div class="ri">
       <div class="rph">Phase 4 — 2026</div>
-      <div class="rtit" data-i18n="phase4_title">Ecosystem</div>
+      <div class="rtit">Ecosystem</div>
       <ul class="rlist">
-        <li data-i18n="phase4_1">Cross-chain bridge BTC & ETH</li>
-        <li data-i18n="phase4_2">Cross-chain bridge integration</li>
-        <li data-i18n="phase4_3">CoinGecko & CMC listing</li>
-        <li data-i18n="phase4_4">Mobile wallet</li>
+        <li>Cross-chain bridge BTC & ETH</li>
+        <li>Cross-chain bridge integration</li>
+        <li>CoinGecko & CMC listing</li>
+        <li>Mobile wallet</li>
       </ul>
     </div>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
   <div class="flogo">OTCOIN</div>
   <div class="ftag">One Transaction. All Chains.</div>
@@ -289,296 +352,20 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:60px 
     <li><a href="https://github.com/OTCoinFoundation/OTCoin" target="_blank">GitHub</a></li>
     <li><a href="https://t.me/+MGYkB80BhlwzNGQ1" target="_blank">Telegram</a></li>
     <li><a href="https://x.com/OTCoinOfficial" target="_blank">Twitter/X</a></li>
-    <li><a href="http://76.13.192.203/explorer.html">Explorer</a></li>
+    <li><a href="explorer.html">Explorer</a></li>
     <li><a href="http://76.13.192.203/wallet.html">Web Wallet</a></li>
     <li><a href="get-started.html">Get Started</a></li>
     <li><a href="OTCoin-Whitepaper-v2.0-EN.docx" download>Whitepaper</a></li>
     <li><a href="build.html">Build on OTCoin</a></li>
     <li><a href="run-node.html">Run a Node</a></li>
-    <li><a href="http://76.13.192.203/dashboard.html">Mining Dashboard</a></li>
+    <li><a href="dashboard.html">Mining Dashboard</a></li>
     <li><a href="roadmap.html">Roadmap</a></li>
-    <li><a href="http://76.13.192.203/store.html">OTC Store</a></li>
     <li><a href="mailto:foundation@otcoin.org">Contact</a></li>
   </ul>
   <div class="fcopy">© 2025 OTCoin Foundation. All Rights Reserved. | github.com/OTCoinFoundation/OTCoin</div>
 </footer>
 
 <script>
-// ── TRANSLATIONS ──────────────────────────────────────────
-const translations = {
-  en: {
-    nav_vision:'Vision', nav_tokenomics:'Tokenomics', nav_roadmap:'Roadmap',
-    hero_tag:'Independent Blockchain Network', hero_title:'All Chains.',
-    hero_desc:'The next generation of decentralized finance. OTCoin is a sovereign, independent blockchain built for speed, security, and true financial freedom. Your coin. Your rules. Your future.',
-    btn_started:'Get Started →', btn_miner:'⬇️ Download Miner', btn_learn:'Learn More',
-    join_community:'JOIN THE COMMUNITY',
-    stat_supply:'Total Supply OTC', stat_reward:'Block Reward', stat_algo:'Algorithm', stat_consensus:'Consensus',
-    vision_tag:'// Our Vision', vision_title:'Built for the', vision_title2:'Borderless', vision_title3:'Economy',
-    vision_sub:'One sovereign blockchain. Four connected ecosystems. Unlimited potential.',
-    feat1_title:'Independent Chain', feat1_desc:'OTCoin runs on its own blockchain — not a token. Full sovereignty, proven Proof of Work security.',
-    feat2_title:'Cross-Chain Bridge', feat2_desc:'OTCoin is designed to bridge major blockchain ecosystems — send value anywhere with one OTC transaction.',
-    feat3_title:'ECDSA Security', feat3_desc:'secp256k1 cryptography — military-grade security protecting every OTC transaction.',
-    feat4_title:'Fully Decentralized', feat4_desc:'Anyone can run a node. Anyone can mine. OTCoin belongs to its community.',
-    tok_tag:'// Tokenomics', tok_title:'Designed for', tok_title2:'Scarcity',
-    tok_sub:'Hard-capped at 51,000,000 OTC. No inflation. Pure mathematical certainty.',
-    tok_supply:'Total Supply', tok_reward:'Block Reward', tok_halving:'Halving', tok_consensus:'Consensus', tok_algo:'Algorithm',
-    road_tag:'// Roadmap', road_title:'The Path', road_title2:'Forward',
-    road_sub:'Transparent. Achievable. Community-driven.',
-    phase1_title:'Foundation', phase1_1:'Blockchain core complete', phase1_2:'Wallet & ECDSA cryptography', phase1_3:'P2P network node', phase1_4:'Whitepaper published', phase1_5:'GitHub repository live',
-    phase2_title:'Testnet & Community', phase2_1:'Public testnet launch', phase2_2:'Bug bounty program', phase2_3:'Security audit', phase2_4:'Official website live', phase2_5:'Community building',
-    phase3_title:'Mainnet Launch', phase3_1:'Genesis block', phase3_2:'Public mining opens', phase3_3:'Block explorer', phase3_4:'First DEX listing',
-    phase4_title:'Ecosystem', phase4_1:'Cross-chain bridge BTC & ETH', phase4_2:'Cross-chain bridge integration', phase4_3:'CoinGecko & CMC listing', phase4_4:'Mobile wallet',
-  },
-  id: {
-    nav_vision:'Visi', nav_tokenomics:'Tokenomik', nav_roadmap:'Peta Jalan',
-    hero_tag:'Jaringan Blockchain Independen', hero_title:'Semua Chain.',
-    hero_desc:'Generasi berikutnya dari keuangan terdesentralisasi. OTCoin adalah blockchain berdaulat dan independen yang dibangun untuk kecepatan, keamanan, dan kebebasan finansial sejati. Koin kamu. Aturan kamu. Masa depan kamu.',
-    btn_started:'Mulai Sekarang →', btn_miner:'⬇️ Unduh Miner', btn_learn:'Pelajari Lebih',
-    join_community:'BERGABUNG KOMUNITAS',
-    stat_supply:'Total Suplai OTC', stat_reward:'Hadiah Blok', stat_algo:'Algoritma', stat_consensus:'Konsensus',
-    vision_tag:'// Visi Kami', vision_title:'Dibangun untuk', vision_title2:'Ekonomi', vision_title3:'Tanpa Batas',
-    vision_sub:'Satu blockchain berdaulat. Empat ekosistem terhubung. Potensi tanpa batas.',
-    feat1_title:'Chain Independen', feat1_desc:'OTCoin berjalan di blockchain sendiri — bukan token. Kedaulatan penuh, keamanan Proof of Work yang terbukti.',
-    feat2_title:'Jembatan Lintas Chain', feat2_desc:'OTCoin dirancang untuk menghubungkan ekosistem blockchain utama — kirim nilai ke mana saja dengan satu transaksi OTC.',
-    feat3_title:'Keamanan ECDSA', feat3_desc:'Kriptografi secp256k1 — keamanan tingkat militer melindungi setiap transaksi OTC.',
-    feat4_title:'Sepenuhnya Terdesentralisasi', feat4_desc:'Siapa pun bisa menjalankan node. Siapa pun bisa mining. OTCoin milik komunitasnya.',
-    tok_tag:'// Tokenomik', tok_title:'Dirancang untuk', tok_title2:'Kelangkaan',
-    tok_sub:'Dibatasi keras pada 51.000.000 OTC. Tanpa inflasi. Kepastian matematis murni.',
-    tok_supply:'Total Suplai', tok_reward:'Hadiah Blok', tok_halving:'Halving', tok_consensus:'Konsensus', tok_algo:'Algoritma',
-    road_tag:'// Peta Jalan', road_title:'Jalan', road_title2:'Ke Depan',
-    road_sub:'Transparan. Dapat dicapai. Didorong komunitas.',
-    phase1_title:'Fondasi', phase1_1:'Inti blockchain selesai', phase1_2:'Wallet & kriptografi ECDSA', phase1_3:'Node jaringan P2P', phase1_4:'Whitepaper diterbitkan', phase1_5:'Repositori GitHub live',
-    phase2_title:'Testnet & Komunitas', phase2_1:'Peluncuran testnet publik', phase2_2:'Program bug bounty', phase2_3:'Audit keamanan', phase2_4:'Website resmi live', phase2_5:'Pembangunan komunitas',
-    phase3_title:'Peluncuran Mainnet', phase3_1:'Blok genesis', phase3_2:'Mining publik dibuka', phase3_3:'Penjelajah blok', phase3_4:'Listing DEX pertama',
-    phase4_title:'Ekosistem', phase4_1:'Jembatan lintas chain BTC & ETH', phase4_2:'Integrasi jembatan lintas chain', phase4_3:'Listing CoinGecko & CMC', phase4_4:'Wallet mobile',
-  },
-  ms: {
-    nav_vision:'Visi', nav_tokenomics:'Tokenomik', nav_roadmap:'Peta Jalan',
-    hero_tag:'Rangkaian Blockchain Bebas', hero_title:'Semua Rantaian.',
-    hero_desc:'Generasi seterusnya kewangan terdesentralisasi. OTCoin ialah blockchain berdaulat dan bebas dibina untuk kelajuan, keselamatan, dan kebebasan kewangan sebenar.',
-    btn_started:'Mulakan →', btn_miner:'⬇️ Muat Turun Pelombong', btn_learn:'Ketahui Lagi',
-    join_community:'SERTAI KOMUNITI',
-    stat_supply:'Jumlah Bekalan OTC', stat_reward:'Ganjaran Blok', stat_algo:'Algoritma', stat_consensus:'Konsensus',
-    vision_tag:'// Visi Kami', vision_title:'Dibina untuk', vision_title2:'Ekonomi', vision_title3:'Tanpa Sempadan',
-    vision_sub:'Satu blockchain berdaulat. Empat ekosistem bersambung. Potensi tanpa had.',
-    feat1_title:'Rantaian Bebas', feat1_desc:'OTCoin berjalan pada blockchainnya sendiri — bukan token. Kedaulatan penuh, keselamatan Proof of Work yang terbukti.',
-    feat2_title:'Jambatan Silang Rantaian', feat2_desc:'OTCoin direka untuk menghubungkan ekosistem blockchain utama.',
-    feat3_title:'Keselamatan ECDSA', feat3_desc:'Kriptografi secp256k1 — keselamatan gred tentera melindungi setiap transaksi OTC.',
-    feat4_title:'Sepenuhnya Terdesentralisasi', feat4_desc:'Sesiapa boleh menjalankan nod. Sesiapa boleh melombong. OTCoin milik komunitinya.',
-    tok_tag:'// Tokenomik', tok_title:'Direka untuk', tok_title2:'Kelangkaan',
-    tok_sub:'Had keras pada 51,000,000 OTC. Tiada inflasi. Kepastian matematik tulen.',
-    tok_supply:'Jumlah Bekalan', tok_reward:'Ganjaran Blok', tok_halving:'Halving', tok_consensus:'Konsensus', tok_algo:'Algoritma',
-    road_tag:'// Peta Jalan', road_title:'Laluan', road_title2:'Ke Hadapan',
-    road_sub:'Telus. Boleh dicapai. Didorong komuniti.',
-    phase1_title:'Asas', phase1_1:'Teras blockchain selesai', phase1_2:'Wallet & kriptografi ECDSA', phase1_3:'Nod rangkaian P2P', phase1_4:'Whitepaper diterbitkan', phase1_5:'Repositori GitHub live',
-    phase2_title:'Testnet & Komuniti', phase2_1:'Pelancaran testnet awam', phase2_2:'Program bug bounty', phase2_3:'Audit keselamatan', phase2_4:'Laman web rasmi live', phase2_5:'Pembinaan komuniti',
-    phase3_title:'Pelancaran Mainnet', phase3_1:'Blok genesis', phase3_2:'Perlombongan awam dibuka', phase3_3:'Penjelajah blok', phase3_4:'Penyenaraian DEX pertama',
-    phase4_title:'Ekosistem', phase4_1:'Jambatan silang rantaian BTC & ETH', phase4_2:'Integrasi jambatan silang rantaian', phase4_3:'Penyenaraian CoinGecko & CMC', phase4_4:'Wallet mudah alih',
-  },
-  zh: {
-    nav_vision:'愿景', nav_tokenomics:'代币经济', nav_roadmap:'路线图',
-    hero_tag:'独立区块链网络', hero_title:'所有链。',
-    hero_desc:'去中心化金融的下一代。OTCoin是一个为速度、安全性和真正的财务自由而构建的主权独立区块链。您的币。您的规则。您的未来。',
-    btn_started:'立即开始 →', btn_miner:'⬇️ 下载矿工', btn_learn:'了解更多',
-    join_community:'加入社区',
-    stat_supply:'OTC总供应量', stat_reward:'区块奖励', stat_algo:'算法', stat_consensus:'共识',
-    vision_tag:'// 我们的愿景', vision_title:'为', vision_title2:'无边界', vision_title3:'经济而建',
-    vision_sub:'一个主权区块链。四个互联生态系统。无限潜力。',
-    feat1_title:'独立链', feat1_desc:'OTCoin运行在自己的区块链上——不是代币。完全主权，经过验证的工作量证明安全性。',
-    feat2_title:'跨链桥', feat2_desc:'OTCoin旨在桥接主要区块链生态系统——通过一次OTC交易将价值发送到任何地方。',
-    feat3_title:'ECDSA安全', feat3_desc:'secp256k1密码学——军事级安全保护每笔OTC交易。',
-    feat4_title:'完全去中心化', feat4_desc:'任何人都可以运行节点。任何人都可以挖矿。OTCoin属于其社区。',
-    tok_tag:'// 代币经济', tok_title:'为', tok_title2:'稀缺性', tok_sub:'硬性上限51,000,000 OTC。无通货膨胀。纯粹的数学确定性。',
-    tok_supply:'总供应量', tok_reward:'区块奖励', tok_halving:'减半', tok_consensus:'共识', tok_algo:'算法',
-    road_tag:'// 路线图', road_title:'前进', road_title2:'之路', road_sub:'透明。可实现。社区驱动。',
-    phase1_title:'基础', phase1_1:'区块链核心完成', phase1_2:'钱包和ECDSA密码学', phase1_3:'P2P网络节点', phase1_4:'白皮书发布', phase1_5:'GitHub仓库上线',
-    phase2_title:'测试网和社区', phase2_1:'公共测试网启动', phase2_2:'漏洞赏金计划', phase2_3:'安全审计', phase2_4:'官方网站上线', phase2_5:'社区建设',
-    phase3_title:'主网启动', phase3_1:'创世区块', phase3_2:'公共挖矿开放', phase3_3:'区块浏览器', phase3_4:'首次DEX上市',
-    phase4_title:'生态系统', phase4_1:'BTC和ETH跨链桥', phase4_2:'跨链桥集成', phase4_3:'CoinGecko和CMC上市', phase4_4:'移动钱包',
-  },
-  ja: {
-    nav_vision:'ビジョン', nav_tokenomics:'トークノミクス', nav_roadmap:'ロードマップ',
-    hero_tag:'独立ブロックチェーンネットワーク', hero_title:'すべてのチェーン。',
-    hero_desc:'分散型金融の次世代。OTCoinは、スピード、セキュリティ、真の財務的自由のために構築された主権独立ブロックチェーンです。',
-    btn_started:'始める →', btn_miner:'⬇️ マイナーをダウンロード', btn_learn:'もっと詳しく',
-    join_community:'コミュニティに参加',
-    stat_supply:'OTC総供給量', stat_reward:'ブロック報酬', stat_algo:'アルゴリズム', stat_consensus:'コンセンサス',
-    vision_tag:'// 私たちのビジョン', vision_title:'のために構築', vision_title2:'ボーダーレス', vision_title3:'エコノミー',
-    vision_sub:'1つの主権ブロックチェーン。4つの連携エコシステム。無限の可能性。',
-    feat1_title:'独立チェーン', feat1_desc:'OTCoinは独自のブロックチェーンで動作します—トークンではありません。',
-    feat2_title:'クロスチェーンブリッジ', feat2_desc:'OTCoinは主要なブロックチェーンエコシステムを橋渡しするように設計されています。',
-    feat3_title:'ECDSAセキュリティ', feat3_desc:'secp256k1暗号—すべてのOTCトランザクションを保護する軍事グレードのセキュリティ。',
-    feat4_title:'完全な分散化', feat4_desc:'誰でもノードを実行できます。誰でもマイニングできます。OTCoinはコミュニティのものです。',
-    tok_tag:'// トークノミクス', tok_title:'のために設計', tok_title2:'希少性', tok_sub:'51,000,000 OTCにハードキャップ。インフレなし。',
-    tok_supply:'総供給量', tok_reward:'ブロック報酬', tok_halving:'半減期', tok_consensus:'コンセンサス', tok_algo:'アルゴリズム',
-    road_tag:'// ロードマップ', road_title:'前進への', road_title2:'道', road_sub:'透明性。達成可能。コミュニティ主導。',
-    phase1_title:'基盤', phase1_1:'ブロックチェーンコア完成', phase1_2:'ウォレットとECDSA暗号', phase1_3:'P2Pネットワークノード', phase1_4:'ホワイトペーパー公開', phase1_5:'GitHubリポジトリ開設',
-    phase2_title:'テストネットとコミュニティ', phase2_1:'公開テストネット開始', phase2_2:'バグバウンティプログラム', phase2_3:'セキュリティ監査', phase2_4:'公式サイト開設', phase2_5:'コミュニティ構築',
-    phase3_title:'メインネット開始', phase3_1:'ジェネシスブロック', phase3_2:'公開マイニング開始', phase3_3:'ブロックエクスプローラー', phase3_4:'初DEXリスティング',
-    phase4_title:'エコシステム', phase4_1:'BTCとETHのクロスチェーンブリッジ', phase4_2:'クロスチェーンブリッジ統合', phase4_3:'CoinGeckoとCMCリスティング', phase4_4:'モバイルウォレット',
-  },
-  ko: {
-    nav_vision:'비전', nav_tokenomics:'토크노믹스', nav_roadmap:'로드맵',
-    hero_tag:'독립 블록체인 네트워크', hero_title:'모든 체인.',
-    hero_desc:'탈중앙화 금융의 차세대. OTCoin은 속도, 보안, 진정한 금융 자유를 위해 구축된 주권 독립 블록체인입니다.',
-    btn_started:'시작하기 →', btn_miner:'⬇️ 마이너 다운로드', btn_learn:'자세히 알아보기',
-    join_community:'커뮤니티 참여',
-    stat_supply:'OTC 총 공급량', stat_reward:'블록 보상', stat_algo:'알고리즘', stat_consensus:'합의',
-    vision_tag:'// 우리의 비전', vision_title:'위한 구축', vision_title2:'경계 없는', vision_title3:'경제',
-    vision_sub:'하나의 주권 블록체인. 네 개의 연결된 생태계. 무한한 잠재력.',
-    feat1_title:'독립 체인', feat1_desc:'OTCoin은 자체 블록체인에서 실행됩니다—토큰이 아닙니다.',
-    feat2_title:'크로스체인 브리지', feat2_desc:'OTCoin은 주요 블록체인 생태계를 연결하도록 설계되었습니다.',
-    feat3_title:'ECDSA 보안', feat3_desc:'secp256k1 암호화—모든 OTC 거래를 보호하는 군사급 보안.',
-    feat4_title:'완전한 탈중앙화', feat4_desc:'누구나 노드를 실행할 수 있습니다. 누구나 채굴할 수 있습니다.',
-    tok_tag:'// 토크노믹스', tok_title:'를 위한 설계', tok_title2:'희소성', tok_sub:'51,000,000 OTC 하드캡. 인플레이션 없음.',
-    tok_supply:'총 공급량', tok_reward:'블록 보상', tok_halving:'반감기', tok_consensus:'합의', tok_algo:'알고리즘',
-    road_tag:'// 로드맵', road_title:'앞으로의', road_title2:'길', road_sub:'투명성. 달성 가능. 커뮤니티 주도.',
-    phase1_title:'기반', phase1_1:'블록체인 코어 완성', phase1_2:'지갑 및 ECDSA 암호화', phase1_3:'P2P 네트워크 노드', phase1_4:'백서 발행', phase1_5:'GitHub 저장소 개설',
-    phase2_title:'테스트넷 및 커뮤니티', phase2_1:'공개 테스트넷 출시', phase2_2:'버그 바운티 프로그램', phase2_3:'보안 감사', phase2_4:'공식 웹사이트 개설', phase2_5:'커뮤니티 구축',
-    phase3_title:'메인넷 출시', phase3_1:'제네시스 블록', phase3_2:'공개 채굴 시작', phase3_3:'블록 탐색기', phase3_4:'첫 DEX 상장',
-    phase4_title:'생태계', phase4_1:'BTC 및 ETH 크로스체인 브리지', phase4_2:'크로스체인 브리지 통합', phase4_3:'CoinGecko 및 CMC 상장', phase4_4:'모바일 지갑',
-  },
-  es: {
-    nav_vision:'Visión', nav_tokenomics:'Tokenomía', nav_roadmap:'Hoja de Ruta',
-    hero_tag:'Red Blockchain Independiente', hero_title:'Todas las Cadenas.',
-    hero_desc:'La próxima generación de finanzas descentralizadas. OTCoin es una blockchain soberana e independiente construida para velocidad, seguridad y verdadera libertad financiera.',
-    btn_started:'Comenzar →', btn_miner:'⬇️ Descargar Minero', btn_learn:'Saber Más',
-    join_community:'ÚNETE A LA COMUNIDAD',
-    stat_supply:'Suministro Total OTC', stat_reward:'Recompensa de Bloque', stat_algo:'Algoritmo', stat_consensus:'Consenso',
-    vision_tag:'// Nuestra Visión', vision_title:'Construido para la', vision_title2:'Economía', vision_title3:'Sin Fronteras',
-    vision_sub:'Una blockchain soberana. Cuatro ecosistemas conectados. Potencial ilimitado.',
-    feat1_title:'Cadena Independiente', feat1_desc:'OTCoin funciona en su propia blockchain, no es un token. Soberanía total, seguridad PoW probada.',
-    feat2_title:'Puente Entre Cadenas', feat2_desc:'OTCoin está diseñado para conectar los principales ecosistemas blockchain.',
-    feat3_title:'Seguridad ECDSA', feat3_desc:'Criptografía secp256k1: seguridad de grado militar protegiendo cada transacción OTC.',
-    feat4_title:'Completamente Descentralizado', feat4_desc:'Cualquiera puede ejecutar un nodo. Cualquiera puede minar. OTCoin pertenece a su comunidad.',
-    tok_tag:'// Tokenomía', tok_title:'Diseñado para la', tok_title2:'Escasez', tok_sub:'Límite máximo de 51,000,000 OTC. Sin inflación.',
-    tok_supply:'Suministro Total', tok_reward:'Recompensa de Bloque', tok_halving:'Halving', tok_consensus:'Consenso', tok_algo:'Algoritmo',
-    road_tag:'// Hoja de Ruta', road_title:'El Camino', road_title2:'Adelante', road_sub:'Transparente. Alcanzable. Impulsado por la comunidad.',
-    phase1_title:'Fundación', phase1_1:'Núcleo blockchain completo', phase1_2:'Billetera y criptografía ECDSA', phase1_3:'Nodo de red P2P', phase1_4:'Whitepaper publicado', phase1_5:'Repositorio GitHub en vivo',
-    phase2_title:'Testnet y Comunidad', phase2_1:'Lanzamiento de testnet público', phase2_2:'Programa de recompensas por bugs', phase2_3:'Auditoría de seguridad', phase2_4:'Sitio web oficial en vivo', phase2_5:'Construcción de comunidad',
-    phase3_title:'Lanzamiento de Mainnet', phase3_1:'Bloque génesis', phase3_2:'Minería pública abierta', phase3_3:'Explorador de bloques', phase3_4:'Primer listado DEX',
-    phase4_title:'Ecosistema', phase4_1:'Puente entre cadenas BTC y ETH', phase4_2:'Integración de puente entre cadenas', phase4_3:'Listado en CoinGecko y CMC', phase4_4:'Billetera móvil',
-  },
-  fr: {
-    nav_vision:'Vision', nav_tokenomics:'Tokenomie', nav_roadmap:'Feuille de Route',
-    hero_tag:'Réseau Blockchain Indépendant', hero_title:'Toutes les Chaînes.',
-    hero_desc:"La prochaine génération de finance décentralisée. OTCoin est une blockchain souveraine et indépendante construite pour la vitesse, la sécurité et la vraie liberté financière.",
-    btn_started:'Commencer →', btn_miner:'⬇️ Télécharger le Mineur', btn_learn:'En Savoir Plus',
-    join_community:'REJOINDRE LA COMMUNAUTÉ',
-    stat_supply:'Offre Totale OTC', stat_reward:'Récompense de Bloc', stat_algo:'Algorithme', stat_consensus:'Consensus',
-    vision_tag:'// Notre Vision', vision_title:'Construit pour', vision_title2:"l'Économie", vision_title3:'Sans Frontières',
-    vision_sub:'Une blockchain souveraine. Quatre écosystèmes connectés. Potentiel illimité.',
-    feat1_title:'Chaîne Indépendante', feat1_desc:"OTCoin fonctionne sur sa propre blockchain — pas un jeton. Souveraineté totale, sécurité Proof of Work éprouvée.",
-    feat2_title:'Pont Inter-Chaînes', feat2_desc:"OTCoin est conçu pour connecter les principaux écosystèmes blockchain.",
-    feat3_title:'Sécurité ECDSA', feat3_desc:"Cryptographie secp256k1 — sécurité de niveau militaire protégeant chaque transaction OTC.",
-    feat4_title:'Entièrement Décentralisé', feat4_desc:"N'importe qui peut gérer un nœud. N'importe qui peut miner. OTCoin appartient à sa communauté.",
-    tok_tag:'// Tokenomie', tok_title:'Conçu pour la', tok_title2:'Rareté', tok_sub:'Plafonné à 51 000 000 OTC. Pas d\'inflation.',
-    tok_supply:'Offre Totale', tok_reward:'Récompense de Bloc', tok_halving:'Halving', tok_consensus:'Consensus', tok_algo:'Algorithme',
-    road_tag:'// Feuille de Route', road_title:'Le Chemin', road_title2:'Vers l\'Avenir', road_sub:'Transparent. Réalisable. Guidé par la communauté.',
-    phase1_title:'Fondation', phase1_1:'Noyau blockchain complet', phase1_2:'Portefeuille et cryptographie ECDSA', phase1_3:'Nœud réseau P2P', phase1_4:'Livre blanc publié', phase1_5:'Dépôt GitHub en ligne',
-    phase2_title:'Testnet et Communauté', phase2_1:'Lancement du testnet public', phase2_2:'Programme de primes aux bugs', phase2_3:'Audit de sécurité', phase2_4:'Site officiel en ligne', phase2_5:'Construction de la communauté',
-    phase3_title:'Lancement du Mainnet', phase3_1:'Bloc génésis', phase3_2:'Minage public ouvert', phase3_3:'Explorateur de blocs', phase3_4:'Premier listing DEX',
-    phase4_title:'Écosystème', phase4_1:'Pont inter-chaînes BTC et ETH', phase4_2:'Intégration du pont inter-chaînes', phase4_3:'Listing CoinGecko et CMC', phase4_4:'Portefeuille mobile',
-  },
-  ar: {
-    nav_vision:'الرؤية', nav_tokenomics:'اقتصاد الرمز', nav_roadmap:'خارطة الطريق',
-    hero_tag:'شبكة بلوكتشين مستقلة', hero_title:'جميع السلاسل.',
-    hero_desc:'الجيل القادم من التمويل اللامركزي. OTCoin هو بلوكتشين سيادي ومستقل مبني للسرعة والأمان والحرية المالية الحقيقية.',
-    btn_started:'ابدأ الآن →', btn_miner:'⬇️ تحميل المعدن', btn_learn:'اعرف المزيد',
-    join_community:'انضم إلى المجتمع',
-    stat_supply:'إجمالي العرض OTC', stat_reward:'مكافأة الكتلة', stat_algo:'الخوارزمية', stat_consensus:'الإجماع',
-    vision_tag:'// رؤيتنا', vision_title:'مبني من أجل', vision_title2:'اقتصاد', vision_title3:'بلا حدود',
-    vision_sub:'بلوكتشين واحد سيادي. أربعة أنظمة بيئية متصلة. إمكانات لا محدودة.',
-    feat1_title:'سلسلة مستقلة', feat1_desc:'يعمل OTCoin على بلوكتشينه الخاص — وليس رمزاً.',
-    feat2_title:'جسر عبر السلاسل', feat2_desc:'تم تصميم OTCoin لربط أنظمة البلوكتشين الرئيسية.',
-    feat3_title:'أمان ECDSA', feat3_desc:'تشفير secp256k1 — أمان عسكري المستوى يحمي كل معاملة OTC.',
-    feat4_title:'لامركزي بالكامل', feat4_desc:'يمكن لأي شخص تشغيل عقدة. يمكن لأي شخص التعدين.',
-    tok_tag:'// اقتصاد الرمز', tok_title:'مصمم من أجل', tok_title2:'الندرة', tok_sub:'محدود بـ 51,000,000 OTC. لا تضخم.',
-    tok_supply:'إجمالي العرض', tok_reward:'مكافأة الكتلة', tok_halving:'التنصيف', tok_consensus:'الإجماع', tok_algo:'الخوارزمية',
-    road_tag:'// خارطة الطريق', road_title:'الطريق', road_title2:'للأمام', road_sub:'شفاف. قابل للتحقيق. مدفوع بالمجتمع.',
-    phase1_title:'الأساس', phase1_1:'اكتمال نواة البلوكتشين', phase1_2:'المحفظة وتشفير ECDSA', phase1_3:'عقدة شبكة P2P', phase1_4:'نشر الورقة البيضاء', phase1_5:'مستودع GitHub مباشر',
-    phase2_title:'الشبكة التجريبية والمجتمع', phase2_1:'إطلاق الشبكة التجريبية العامة', phase2_2:'برنامج مكافآت الأخطاء', phase2_3:'تدقيق الأمان', phase2_4:'الموقع الرسمي مباشر', phase2_5:'بناء المجتمع',
-    phase3_title:'إطلاق الشبكة الرئيسية', phase3_1:'كتلة النشأة', phase3_2:'فتح التعدين العام', phase3_3:'مستكشف الكتل', phase3_4:'أول إدراج DEX',
-    phase4_title:'النظام البيئي', phase4_1:'جسر BTC و ETH عبر السلاسل', phase4_2:'تكامل الجسر عبر السلاسل', phase4_3:'إدراج CoinGecko و CMC', phase4_4:'محفظة الهاتف المحمول',
-  },
-  ru: {
-    nav_vision:'Видение', nav_tokenomics:'Токономика', nav_roadmap:'Дорожная карта',
-    hero_tag:'Независимая блокчейн-сеть', hero_title:'Все цепочки.',
-    hero_desc:'Следующее поколение децентрализованных финансов. OTCoin — суверенный независимый блокчейн, созданный для скорости, безопасности и истинной финансовой свободы.',
-    btn_started:'Начать →', btn_miner:'⬇️ Скачать майнер', btn_learn:'Узнать больше',
-    join_community:'ПРИСОЕДИНЯЙТЕСЬ К СООБЩЕСТВУ',
-    stat_supply:'Общее предложение OTC', stat_reward:'Награда за блок', stat_algo:'Алгоритм', stat_consensus:'Консенсус',
-    vision_tag:'// Наше видение', vision_title:'Создан для', vision_title2:'безграничной', vision_title3:'экономики',
-    vision_sub:'Один суверенный блокчейн. Четыре связанные экосистемы. Безграничный потенциал.',
-    feat1_title:'Независимая цепочка', feat1_desc:'OTCoin работает на собственном блокчейне — не токен.',
-    feat2_title:'Кросс-чейн мост', feat2_desc:'OTCoin разработан для объединения основных блокчейн-экосистем.',
-    feat3_title:'Безопасность ECDSA', feat3_desc:'Криптография secp256k1 — безопасность военного уровня.',
-    feat4_title:'Полностью децентрализован', feat4_desc:'Любой может запустить узел. Любой может майнить.',
-    tok_tag:'// Токономика', tok_title:'Создан для', tok_title2:'дефицита', tok_sub:'Жёсткий лимит 51 000 000 OTC. Без инфляции.',
-    tok_supply:'Общее предложение', tok_reward:'Награда за блок', tok_halving:'Халвинг', tok_consensus:'Консенсус', tok_algo:'Алгоритм',
-    road_tag:'// Дорожная карта', road_title:'Путь', road_title2:'вперёд', road_sub:'Прозрачно. Достижимо. Управляется сообществом.',
-    phase1_title:'Основание', phase1_1:'Ядро блокчейна завершено', phase1_2:'Кошелёк и криптография ECDSA', phase1_3:'P2P сетевой узел', phase1_4:'Белая книга опубликована', phase1_5:'Репозиторий GitHub запущен',
-    phase2_title:'Тестнет и сообщество', phase2_1:'Запуск публичного тестнета', phase2_2:'Программа вознаграждений за ошибки', phase2_3:'Аудит безопасности', phase2_4:'Официальный сайт запущен', phase2_5:'Создание сообщества',
-    phase3_title:'Запуск основной сети', phase3_1:'Блок генезиса', phase3_2:'Открытие публичного майнинга', phase3_3:'Обозреватель блоков', phase3_4:'Первый листинг DEX',
-    phase4_title:'Экосистема', phase4_1:'Кросс-чейн мост BTC и ETH', phase4_2:'Интеграция кросс-чейн моста', phase4_3:'Листинг на CoinGecko и CMC', phase4_4:'Мобильный кошелёк',
-  },
-  ph: {
-    nav_vision:'Bisyon', nav_tokenomics:'Tokenomiya', nav_roadmap:'Mapa ng Daan',
-    hero_tag:'Independyenteng Blockchain Network', hero_title:'Lahat ng Chain.',
-    hero_desc:'Ang susunod na henerasyon ng desentralisadong pananalapi. Ang OTCoin ay isang soberanya at independyenteng blockchain na itinayo para sa bilis, seguridad, at tunay na kalayaang pinansyal.',
-    btn_started:'Magsimula →', btn_miner:'⬇️ I-download ang Miner', btn_learn:'Alamin Pa',
-    join_community:'SUMALI SA KOMUNIDAD',
-    stat_supply:'Kabuuang Supply ng OTC', stat_reward:'Gantimpala sa Bloke', stat_algo:'Algorithm', stat_consensus:'Consensus',
-    vision_tag:'// Ang Aming Bisyon', vision_title:'Itinayo para sa', vision_title2:'Walang Hangganan', vision_title3:'na Ekonomiya',
-    vision_sub:'Isang soberanya na blockchain. Apat na konektadong ecosystem. Walang limitasyong potensyal.',
-    feat1_title:'Independyenteng Chain', feat1_desc:'Ang OTCoin ay tumatakbo sa sarili nitong blockchain — hindi token.',
-    feat2_title:'Cross-Chain Bridge', feat2_desc:'Ang OTCoin ay dinisenyo para ikonekta ang mga pangunahing blockchain ecosystem.',
-    feat3_title:'Seguridad ng ECDSA', feat3_desc:'Cryptography na secp256k1 — seguridad na antas-militar na nagpoprotekta sa bawat transaksyon ng OTC.',
-    feat4_title:'Ganap na Desentralisado', feat4_desc:'Sinuman ay maaaring magpatakbo ng node. Sinuman ay maaaring mag-mine.',
-    tok_tag:'// Tokenomiya', tok_title:'Dinisenyo para sa', tok_title2:'Kakulangan', tok_sub:'Mahigpit na limitado sa 51,000,000 OTC. Walang inflation.',
-    tok_supply:'Kabuuang Supply', tok_reward:'Gantimpala sa Bloke', tok_halving:'Halving', tok_consensus:'Consensus', tok_algo:'Algorithm',
-    road_tag:'// Mapa ng Daan', road_title:'Ang Landas', road_title2:'Pasulong', road_sub:'Transparent. Makakamit. Pinapatakbo ng komunidad.',
-    phase1_title:'Pundasyon', phase1_1:'Natapos ang core ng blockchain', phase1_2:'Wallet at ECDSA cryptography', phase1_3:'P2P network node', phase1_4:'Nailathala ang whitepaper', phase1_5:'Nabuksan ang GitHub repository',
-    phase2_title:'Testnet at Komunidad', phase2_1:'Paglulunsad ng pampublikong testnet', phase2_2:'Programa ng bug bounty', phase2_3:'Security audit', phase2_4:'Nabuksan ang opisyal na website', phase2_5:'Pagtatayo ng komunidad',
-    phase3_title:'Paglulunsad ng Mainnet', phase3_1:'Genesis block', phase3_2:'Binuksan ang pampublikong mining', phase3_3:'Block explorer', phase3_4:'Unang DEX listing',
-    phase4_title:'Ecosystem', phase4_1:'Cross-chain bridge BTC at ETH', phase4_2:'Integrasyon ng cross-chain bridge', phase4_3:'Listing sa CoinGecko at CMC', phase4_4:'Mobile wallet',
-  },
-};
-
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  const t = translations[lang] || translations.en;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key]) el.textContent = t[key];
-  });
-  document.getElementById('currentLang').textContent = lang.toUpperCase();
-  document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
-  document.querySelector(`.lang-option[onclick="setLang('${lang}')"]`).classList.add('active');
-  document.getElementById('langDropdown').classList.remove('show');
-  // RTL untuk Arabic
-  document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
-  localStorage.setItem('otcLang', lang);
-}
-
-function toggleLang() {
-  document.getElementById('langDropdown').classList.toggle('show');
-}
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.lang-selector')) {
-    document.getElementById('langDropdown').classList.remove('show');
-  }
-});
-
-// Auto detect language
-const saved = localStorage.getItem('otcLang');
-const browser = navigator.language.substring(0,2);
-const detected = saved || (translations[browser] ? browser : 'en');
-if (detected !== 'en') setLang(detected);
-
 // ── PARTICLE NETWORK ──────────────────────────────────────
 const canvas = document.getElementById('networkCanvas');
 const ctx = canvas.getContext('2d');
@@ -586,31 +373,159 @@ let W, H, particles = [];
 const mouse = { x: -9999, y: -9999 };
 const COUNT = 85, MAX_D = 150;
 const GOLD = 'rgba(244,167,23,';
-function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
 class Dot {
   constructor() { this.reset(); }
-  reset() { this.x=Math.random()*W; this.y=Math.random()*H; this.vx=(Math.random()-.5)*.35; this.vy=(Math.random()-.5)*.35; this.r=Math.random()*1.6+.5; this.a=Math.random()*.45+.15; }
-  update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>W)this.vx*=-1; if(this.y<0||this.y>H)this.vy*=-1; }
-  draw() { ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fillStyle=GOLD+this.a+')'; ctx.fill(); }
-}
-function init() { particles = Array.from({length:COUNT},()=>new Dot()); }
-function drawLines() {
-  for(let i=0;i<particles.length;i++){
-    const p=particles[i];
-    for(let j=i+1;j<particles.length;j++){
-      const q=particles[j]; const dx=p.x-q.x,dy=p.y-q.y; const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<MAX_D){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=GOLD+(1-d/MAX_D)*.15+')';ctx.lineWidth=.7;ctx.stroke();}
-    }
-    const dx=p.x-mouse.x,dy=p.y-mouse.y; const d=Math.sqrt(dx*dx+dy*dy);
-    if(d<200){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);ctx.strokeStyle=GOLD+(1-d/200)*.35+')';ctx.lineWidth=.9;ctx.stroke();}
+  reset() {
+    this.x  = Math.random() * W;
+    this.y  = Math.random() * H;
+    this.vx = (Math.random() - .5) * .35;
+    this.vy = (Math.random() - .5) * .35;
+    this.r  = Math.random() * 1.6 + .5;
+    this.a  = Math.random() * .45 + .15;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W) this.vx *= -1;
+    if (this.y < 0 || this.y > H) this.vy *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = GOLD + this.a + ')';
+    ctx.fill();
   }
 }
-function animate() { ctx.clearRect(0,0,W,H); particles.forEach(p=>{p.update();p.draw();}); drawLines(); requestAnimationFrame(animate); }
-window.addEventListener('resize',()=>{resize();init();});
-window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+
+function init() {
+  particles = Array.from({ length: COUNT }, () => new Dot());
+}
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    for (let j = i + 1; j < particles.length; j++) {
+      const q = particles[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < MAX_D) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.strokeStyle = GOLD + (1 - d/MAX_D) * .15 + ')';
+        ctx.lineWidth = .7;
+        ctx.stroke();
+      }
+    }
+    // Mouse lines
+    const dx = p.x - mouse.x, dy = p.y - mouse.y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < 200) {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(mouse.x, mouse.y);
+      ctx.strokeStyle = GOLD + (1 - d/200) * .35 + ')';
+      ctx.lineWidth = .9;
+      ctx.stroke();
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => { resize(); init(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
 resize(); init(); animate();
-const obs = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:.08});
-document.querySelectorAll('.feat,.titem,.ri,.stat').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(22px)';el.style.transition='opacity .7s ease, transform .7s ease';obs.observe(el);});
+
+// ── LIVE BLOCKCHAIN TICKER ──────────────────────────────────────────
+const TICKER_API = 'https://otcoin.org/api/stats';
+let tickerStart = Date.now();
+let lastTickerBlocks = 0;
+
+function updateTickerUptime(){
+  const e = Math.floor((Date.now()-tickerStart)/1000);
+  const h = Math.floor(e/3600).toString().padStart(2,'0');
+  const m = Math.floor((e%3600)/60).toString().padStart(2,'0');
+  const s = (e%60).toString().padStart(2,'0');
+  const el = document.getElementById('liveUptime');
+  if(el) el.textContent = h+':'+m+':'+s;
+}
+
+function flashTicker(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.transform = 'scale(1.15)';
+  setTimeout(()=>el.style.transform='',400);
+}
+
+function fetchTicker(){
+  fetch(TICKER_API)
+    .then(r=>r.json())
+    .then(d=>{
+      const blocks = d.total_blocks || 0;
+      const mined = d.total_mined || 0;
+      const pct = (mined/51000000*100).toFixed(4);
+      
+      if(blocks !== lastTickerBlocks && lastTickerBlocks > 0){
+        flashTicker('liveBlocks');
+        flashTicker('liveMined');
+      }
+      lastTickerBlocks = blocks;
+      
+      const bEl = document.getElementById('liveBlocks');
+      const mEl = document.getElementById('liveMined');
+      const pEl = document.getElementById('livePct');
+      
+      if(bEl) bEl.textContent = blocks.toLocaleString();
+      if(mEl) mEl.textContent = Math.floor(mined).toLocaleString();
+      if(pEl) pEl.textContent = pct + '%';
+    })
+    .catch(()=>{});
+}
+
+setInterval(updateTickerUptime, 1000);
+setInterval(fetchTicker, 10000);
+fetchTicker();
+updateTickerUptime();
+
+
+// ── SCROLL REVEAL ──────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: .08 });
+
+document.querySelectorAll('.feat,.titem,.ri,.cnode,.stat').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(22px)';
+  el.style.transition = 'opacity .7s ease, transform .7s ease';
+  obs.observe(el);
+});
+</script>
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){
+  if(e.ctrlKey && ["u","U","s","S","i","I","j","J"].includes(e.key)){e.preventDefault();}
+  if(e.key==="F12"){e.preventDefault();}
+});
+document.addEventListener("selectstart",function(e){
+  if(e.target.tagName!=="INPUT"&&e.target.tagName!=="TEXTAREA"){e.preventDefault();}
+});
 </script>
 </body>
 </html>
