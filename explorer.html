@@ -521,7 +521,7 @@ function fetchRealData(){
     .catch(() => {});
 
   // Fetch transactions
-  fetch(API + '/api/transactions/' + MINER)
+  fetch(API + '/api/all-transactions')
     .then(r => r.json())
     .then(d => {
       if(d.transactions && d.transactions.length > 0){
