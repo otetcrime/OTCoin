@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OTCoin Wallet</title>
+<title>OTCoin Web Wallet</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FFD166'/><stop offset='100%25' stop-color='%23C97B00'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='38' fill='%23060610'/><text x='50' y='56' font-family='Georgia,serif' font-size='24' font-weight='bold' text-anchor='middle' fill='%23FFD166'>OTC</text></svg>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Tenor+Sans&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --g1:#FFD166;--g2:#F4A717;--g3:#C97B00;
   --void:#03030A;--dark:#07080F;--surf:#0C0D17;--surf2:#141520;
   --bdr:rgba(244,167,23,0.12);--txt:#E8E8F0;--dim:#5A5C78;
-  --green:#00C896;--red:#FF5060;
+  --green:#00C896;--red:#FF5060;--blue:#4B9FFF;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Tenor Sans',sans-serif;background:var(--void);color:var(--txt);min-height:100vh;}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(244,167,23,0.04),transparent 60%);pointer-events:none;}
 
 /* NAV */
@@ -31,11 +30,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,3,10,0.9);backdrop-filte
 .screen.active{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-/* LOGIN SCREEN */
+/* LOGIN */
 .login-wrap{min-height:calc(100vh - 57px);display:flex;align-items:center;justify-content:center;padding:24px;}
-.login-card{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:40px;width:100%;max-width:420px;position:relative;overflow:hidden;}
-.login-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(244,167,23,0.08),transparent 70%);pointer-events:none;}
-.login-logo{width:64px;height:64px;margin:0 auto 20px;display:block;}
+.login-card{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:40px;width:100%;max-width:440px;}
 .login-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--g1);text-align:center;margin-bottom:6px;}
 .login-sub{font-size:12px;color:var(--dim);text-align:center;margin-bottom:28px;line-height:1.8;}
 
@@ -48,95 +45,95 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,3,10,0.9);backdrop-filte
 .flabel{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:6px;}
 .finput{width:100%;background:var(--dark);border:1px solid var(--bdr);border-radius:10px;padding:13px 16px;color:var(--txt);font-family:'Fira Code',monospace;font-size:12px;outline:none;transition:border-color .2s;margin-bottom:14px;}
 .finput:focus{border-color:rgba(244,167,23,0.35);}
-.finput::placeholder{color:var(--dim);}
-.finput[readonly]{opacity:.7;cursor:default;}
-
-/* BUTTONS */
-.btn{width:100%;padding:14px;border:none;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:2px;transition:all .3s;margin-bottom:8px;font-family:'Tenor Sans',sans-serif;}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
 .btn-gold{background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;}
-.btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(244,167,23,0.3);}
-.btn-out{background:transparent;color:var(--g2);border:1px solid rgba(244,167,23,0.25);}
-.btn-out:hover{background:rgba(244,167,23,0.05);}
-.btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,80,96,0.2);font-size:11px;}
-.btn-green{background:linear-gradient(135deg,#00C896,#007A5C);color:#fff;}
+.btn-gold:hover{opacity:.9;transform:translateY(-1px);}
+.btn-outline{background:transparent;border:1px solid var(--bdr);color:var(--g2);}
+.btn-outline:hover{border-color:var(--g2);background:rgba(244,167,23,0.05);}
 
-/* ALERTS */
-.alert{padding:11px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;line-height:1.7;display:none;}
-.alert.ok{background:rgba(0,200,150,0.08);color:#6ee7b7;border:1px solid rgba(0,200,150,0.2);display:block;}
-.alert.err{background:rgba(255,80,96,0.08);color:#ff8090;border:1px solid rgba(255,80,96,0.2);display:block;}
-.alert.warn{background:rgba(244,167,23,0.06);color:var(--g1);border:1px solid rgba(244,167,23,0.15);display:block;}
+/* ALERT */
+.alert{padding:12px 16px;border-radius:8px;font-size:12px;margin-top:12px;min-height:20px;}
+.alert.ok{background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:var(--green);}
+.alert.err{background:rgba(255,80,96,0.1);border:1px solid rgba(255,80,96,0.3);color:var(--red);}
 
 /* DASHBOARD */
-.dash-wrap{max-width:480px;margin:0 auto;padding:24px 20px 80px;}
+.dash-wrap{max-width:480px;margin:0 auto;padding:24px;}
 
-/* BALANCE HERO */
-.bal-hero{background:linear-gradient(135deg,rgba(244,167,23,0.07),rgba(201,123,0,0.02));border:1px solid var(--bdr);border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden;}
-.bal-hero::after{content:'OTC';position:absolute;right:-20px;bottom:-30px;font-family:'Cormorant Garamond',serif;font-size:120px;font-weight:700;color:rgba(244,167,23,0.04);pointer-events:none;line-height:1;}
-.bal-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
-.bal-num{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,14vw,80px);font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-.bal-unit{font-size:13px;color:var(--g3);letter-spacing:4px;margin-top:6px;}
-.bal-addr{font-family:'Fira Code',monospace;font-size:10px;color:var(--dim);margin-top:14px;word-break:break-all;line-height:1.6;padding:0 8px;}
-.copy-row{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
-.cp-btn{background:rgba(244,167,23,0.08);border:1px solid rgba(244,167,23,0.15);color:var(--g2);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'Tenor Sans',sans-serif;letter-spacing:1px;transition:all .2s;}
-.cp-btn:hover{background:rgba(244,167,23,0.15);}
+/* BALANCE CARD */
+.bal-card{background:linear-gradient(135deg,rgba(244,167,23,0.08),rgba(201,123,0,0.03));border:1px solid var(--bdr);border-radius:20px;padding:32px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.bal-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(244,167,23,0.06),transparent 60%);pointer-events:none;}
+.bal-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.bal-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.bal-unit{font-size:16px;color:var(--g3);letter-spacing:3px;margin-top:6px;}
+.bal-addr{font-family:'Fira Code',monospace;font-size:10px;color:var(--dim);margin-top:14px;word-break:break-all;}
+.bal-actions{display:flex;gap:8px;margin-top:16px;justify-content:center;}
+.bal-btn{padding:8px 20px;background:rgba(244,167,23,0.1);border:1px solid var(--bdr);color:var(--g2);font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.bal-btn:hover{border-color:var(--g2);background:rgba(244,167,23,0.15);}
 
-/* ACTION GRID */
-.act-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
-.act-btn{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:16px 8px;cursor:pointer;text-align:center;transition:all .2s;}
-.act-btn:hover{border-color:rgba(244,167,23,0.3);transform:translateY(-2px);}
+/* ACTION BUTTONS */
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.act-btn{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;}
+.act-btn:hover{border-color:var(--g2);background:rgba(244,167,23,0.05);}
 .act-icon{font-size:22px;margin-bottom:6px;}
-.act-lbl{font-size:9px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;}
+.act-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
 
-/* SECTION */
-.sec{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:14px;}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--g1);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(30,34,53,0.4);}
-.row:last-child{border-bottom:none;}
-.row-k{font-size:12px;color:var(--dim);}
-.row-v{font-family:monospace;font-size:11px;color:var(--txt);}
-.row-v.g{color:var(--green);}
-.row-v.gold{color:var(--g2);}
+/* SECTION CARDS */
+.sec-card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:24px;margin-bottom:16px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--g1);margin-bottom:16px;}
 
-/* TX */
-.tx-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(30,34,53,0.3);}
+/* NETWORK INFO */
+.net-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(30,34,53,0.3);font-size:12px;}
+.net-row:last-child{border-bottom:none;}
+.net-key{color:var(--dim);}
+.net-val{font-family:'Fira Code',monospace;color:var(--txt);}
+.net-val.green{color:var(--green);}
+.net-val.gold{color:var(--g2);}
+
+/* HISTORY */
+.tx-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(30,34,53,0.3);}
 .tx-item:last-child{border-bottom:none;}
-.tx-icon{font-size:20px;margin-right:10px;}
+.tx-icon{font-size:20px;margin-right:12px;}
 .tx-info{flex:1;}
-.tx-type{font-size:12px;color:var(--txt);font-weight:600;}
-.tx-addr{font-family:'Fira Code',monospace;font-size:9px;color:var(--dim);margin-top:2px;}
-.tx-amt-in{color:var(--green);font-family:'Fira Code',monospace;font-size:14px;font-weight:700;}
-.tx-amt-out{color:var(--red);font-family:'Fira Code',monospace;font-size:14px;font-weight:700;}
+.tx-type{font-size:12px;color:var(--txt);margin-bottom:3px;}
+.tx-addr{font-family:'Fira Code',monospace;font-size:10px;color:var(--dim);}
+.tx-amt-in{color:var(--green);font-family:'Fira Code',monospace;font-size:13px;font-weight:600;}
+.tx-amt-out{color:var(--red);font-family:'Fira Code',monospace;font-size:13px;font-weight:600;}
+.tx-time{font-size:10px;color:var(--dim);margin-top:3px;}
 
 /* MODAL */
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;padding:20px;}
-.modal.show{display:flex;}
-.modal-box{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:28px;width:100%;max-width:400px;animation:fadeUp .3s ease;}
-.modal-hdr{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--g1);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
-.modal-x{cursor:pointer;color:var(--dim);font-size:22px;line-height:1;}
-.modal-x:hover{color:var(--txt);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:32px;width:100%;max-width:420px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--g1);margin-bottom:20px;}
+.modal-close{float:right;cursor:pointer;color:var(--dim);font-size:20px;margin-top:-4px;}
 
 /* PIN */
-.pin-dots{display:flex;gap:12px;justify-content:center;margin:20px 0;}
-.pin-dot{width:14px;height:14px;border-radius:50%;background:var(--dark);border:2px solid var(--bdr);transition:all .2s;}
+.pin-screen{min-height:calc(100vh - 57px);display:flex;align-items:center;justify-content:center;padding:24px;}
+.pin-card{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:40px;width:100%;max-width:360px;text-align:center;}
+.pin-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--g1);margin-bottom:8px;}
+.pin-sub{font-size:12px;color:var(--dim);margin-bottom:28px;}
+.pin-dots{display:flex;gap:12px;justify-content:center;margin-bottom:32px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--bdr);background:var(--dark);transition:all .15s;}
 .pin-dot.filled{background:var(--g2);border-color:var(--g2);}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
-.pin-key{background:var(--dark);border:1px solid var(--bdr);border-radius:10px;padding:16px;font-size:18px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;color:var(--txt);}
-.pin-key:hover{background:var(--surf2);border-color:rgba(244,167,23,0.3);}
-.pin-key.del{color:var(--red);}
-
-/* NEW WALLET */
-.wallet-gen{background:var(--dark);border:1px solid var(--bdr);border-radius:10px;padding:16px;margin-bottom:14px;}
-.wg-label{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
-.wg-val{font-family:'Fira Code',monospace;font-size:11px;color:var(--txt);word-break:break-all;line-height:1.6;}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:240px;margin:0 auto;}
+.pin-key{background:var(--surf2);border:1px solid var(--bdr);border-radius:12px;padding:18px;font-size:20px;cursor:pointer;transition:all .15s;}
+.pin-key:hover{border-color:var(--g2);background:rgba(244,167,23,0.08);}
+.pin-key:active{transform:scale(.95);}
 
 /* TOAST */
-#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(0,200,150,0.15);border:1px solid rgba(0,200,150,0.3);color:var(--green);padding:11px 22px;border-radius:10px;font-size:13px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;padding:12px 24px;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* NEW WALLET BOX */
+.new-wallet-box{background:var(--dark);border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-bottom:14px;font-family:'Fira Code',monospace;font-size:11px;}
+.new-wallet-label{font-size:9px;letter-spacing:2px;color:var(--dim);margin-bottom:6px;font-family:'Tenor Sans',sans-serif;}
+.new-wallet-val{word-break:break-all;color:var(--g2);line-height:1.6;}
+.blur-text{filter:blur(4px);cursor:pointer;}
 
 @media(max-width:480px){
-  .act-grid{grid-template-columns:repeat(2,1fr);}
-  .login-card{padding:28px 22px;}
-  .dash-wrap{padding:20px 16px 60px;}
+  .dash-wrap{padding:16px;}
+  .bal-num{font-size:40px;}
+  .actions{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -144,212 +141,185 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,3,10,0.9);backdrop-filte
 
 <nav>
   <a href="index.html" class="logo">OTCOIN</a>
-  <span id="navAddr" class="nav-addr"></span>
+  <span class="nav-addr" id="navAddr"></span>
 </nav>
 
-<!-- ═══════════════════════════════
-     SCREEN 1: LOGIN / PIN
-═══════════════════════════════ -->
-<div id="screenLogin" class="screen active">
-<div class="login-wrap">
-<div class="login-card">
-
-  <svg class="login-logo" viewBox="0 0 100 100">
-    <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFD166"/><stop offset="100%" stop-color="#C97B00"/>
-    </linearGradient></defs>
-    <circle cx="50" cy="50" r="48" fill="url(#lg)"/>
-    <circle cx="50" cy="50" r="38" fill="#060610"/>
-    <text x="50" y="56" font-family="Georgia,serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#FFD166">OTC</text>
-  </svg>
-
-  <div class="login-title">OTCoin Wallet</div>
-  <div class="login-sub">Your private key never leaves your browser.<br>100% secure & private.</div>
-
-  <div class="tabs">
-    <div class="tab on" id="t1" onclick="switchTab(1)">Import</div>
-    <div class="tab" id="t2" onclick="switchTab(2)">Create New</div>
-  </div>
-
-  <!-- IMPORT TAB -->
-  <div id="tabImport">
-    <div class="alert warn">⚠️ Never share your private key with anyone!</div>
-    <label class="flabel">Private Key</label>
-    <input type="password" id="pkImport" class="finput" placeholder="Enter your 64-character private key...">
-
-    <label class="flabel">Set PIN (optional)</label>
-    <input type="password" id="pinImport" class="finput" placeholder="Set 4-6 digit PIN for extra security...">
-
-    <div id="importAlert" class="alert"></div>
-    <button class="btn btn-gold" onclick="doImport()">🔓 Access Wallet</button>
-  </div>
-
-  <!-- CREATE TAB -->
-  <div id="tabCreate" style="display:none;">
-    <div class="alert ok">✅ Generate a brand new wallet instantly!</div>
-    <button class="btn btn-gold" onclick="doCreate()">🔑 Generate New Wallet</button>
-    <div id="newWalletDiv" style="display:none;margin-top:16px;">
-      <div class="wallet-gen">
-        <div class="wg-label">Your Address <button class="cp-btn" style="padding:3px 8px;" onclick="copyText('genAddr')">Copy</button></div>
-        <div class="wg-val" id="genAddr"></div>
+<!-- LOGIN SCREEN -->
+<div class="screen active" id="screenLogin">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-title">OTC Wallet</div>
+      <div class="login-sub">Wallet terdesentralisasi untuk OTCoin Network</div>
+      <div class="tabs">
+        <div class="tab on" id="t1" onclick="switchTab(1)">IMPORT</div>
+        <div class="tab" id="t2" onclick="switchTab(2)">BUAT BARU</div>
       </div>
-      <div class="wallet-gen">
-        <div class="wg-label">Private Key <span style="color:var(--red);">SECRET!</span> <button class="cp-btn" style="padding:3px 8px;" onclick="copyText('genPk')">Copy</button></div>
-        <div class="wg-val" id="genPk" style="filter:blur(4px);cursor:pointer;" onclick="this.style.filter='none'">Click to reveal</div>
+
+      <!-- IMPORT TAB -->
+      <div id="tabImport">
+        <label class="flabel">Private Key (64 karakter hex)</label>
+        <input class="finput" id="pkImport" type="password" placeholder="Masukkan private key 64 karakter..." autocomplete="off"/>
+        <label class="flabel">PIN (opsional, 4-6 digit)</label>
+        <input class="finput" id="pinImport" type="password" placeholder="Set PIN untuk keamanan..." maxlength="6"/>
+        <button class="btn btn-gold" onclick="doImport()">BUKA WALLET</button>
+        <div class="alert" id="importAlert"></div>
       </div>
-      <div class="alert err" style="display:block;">⚠️ SAVE YOUR PRIVATE KEY NOW! If you lose it, your OTC is gone forever!</div>
-      <label class="flabel">Set PIN (optional)</label>
-      <input type="password" id="pinCreate" class="finput" placeholder="Set 4-6 digit PIN...">
-      <button class="btn btn-gold" onclick="doUseNew()">✅ I Saved It — Open Wallet</button>
+
+      <!-- CREATE TAB -->
+      <div id="tabCreate" style="display:none;">
+        <button class="btn btn-gold" onclick="doCreate()">🎲 GENERATE WALLET BARU</button>
+        <div id="newWalletDiv" style="display:none;margin-top:16px;">
+          <div class="new-wallet-box">
+            <div class="new-wallet-label">ADDRESS</div>
+            <div class="new-wallet-val" id="genAddr"></div>
+          </div>
+          <div class="new-wallet-box">
+            <div class="new-wallet-label">PRIVATE KEY (klik untuk tampilkan)</div>
+            <div class="new-wallet-val blur-text" id="genPk" onclick="this.classList.toggle('blur-text')"></div>
+          </div>
+          <div style="background:rgba(255,80,96,0.1);border:1px solid rgba(255,80,96,0.3);border-radius:8px;padding:12px;font-size:11px;color:var(--red);margin-bottom:14px;">
+            ⚠️ Simpan private key di tempat aman! Hilang = tidak bisa recovery!
+          </div>
+          <label class="flabel">PIN (opsional)</label>
+          <input class="finput" id="pinCreate" type="password" placeholder="Set PIN..." maxlength="6"/>
+          <button class="btn btn-gold" onclick="doUseNew()">GUNAKAN WALLET INI</button>
+        </div>
+      </div>
     </div>
   </div>
-
-</div>
-</div>
 </div>
 
-<!-- ═══════════════════════════════
-     SCREEN 2: PIN ENTRY
-═══════════════════════════════ -->
-<div id="screenPin" class="screen">
-<div class="login-wrap">
-<div class="login-card" style="text-align:center;">
-  <div style="font-size:40px;margin-bottom:12px;">🔐</div>
-  <div class="login-title">Enter PIN</div>
-  <div class="login-sub">Enter your PIN to unlock your wallet</div>
-  <div class="pin-dots" id="pinDots">
-    <div class="pin-dot" id="d0"></div>
-    <div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div>
-    <div class="pin-dot" id="d3"></div>
-    <div class="pin-dot" id="d4"></div>
-    <div class="pin-dot" id="d5"></div>
-  </div>
-  <div class="pin-pad">
-    <div class="pin-key" onclick="pinKey('1')">1</div>
-    <div class="pin-key" onclick="pinKey('2')">2</div>
-    <div class="pin-key" onclick="pinKey('3')">3</div>
-    <div class="pin-key" onclick="pinKey('4')">4</div>
-    <div class="pin-key" onclick="pinKey('5')">5</div>
-    <div class="pin-key" onclick="pinKey('6')">6</div>
-    <div class="pin-key" onclick="pinKey('7')">7</div>
-    <div class="pin-key" onclick="pinKey('8')">8</div>
-    <div class="pin-key" onclick="pinKey('9')">9</div>
-    <div class="pin-key" onclick="pinClear()" style="font-size:13px;color:var(--dim);">Clear</div>
-    <div class="pin-key" onclick="pinKey('0')">0</div>
-    <div class="pin-key del" onclick="pinDel()">⌫</div>
-  </div>
-  <button class="btn btn-out" onclick="showScreen('screenLogin')">← Back</button>
-</div>
-</div>
-</div>
-
-<!-- ═══════════════════════════════
-     SCREEN 3: DASHBOARD
-═══════════════════════════════ -->
-<div id="screenDash" class="screen">
-<div class="dash-wrap">
-
-  <!-- BALANCE -->
-  <div class="bal-hero">
-    <div class="bal-lbl">💰 Your Balance</div>
-    <div class="bal-num" id="balNum">—</div>
-    <div class="bal-unit">OTC</div>
-    <div class="bal-addr" id="balAddr"></div>
-    <div class="copy-row">
-      <button class="cp-btn" onclick="copyAddr()">📋 Copy Address</button>
-      <button class="cp-btn" onclick="loadBal()" style="color:var(--green);border-color:rgba(0,200,150,0.2);">🔄 Refresh</button>
+<!-- PIN SCREEN -->
+<div class="screen" id="screenPin">
+  <div class="pin-screen">
+    <div class="pin-card">
+      <div class="pin-title">🔐 Masukkan PIN</div>
+      <div class="pin-sub">Verifikasi identitas kamu</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+        <div class="pin-dot" id="d4"></div>
+        <div class="pin-dot" id="d5"></div>
+      </div>
+      <div class="pin-grid">
+        <div class="pin-key" onclick="pinKey('1')">1</div>
+        <div class="pin-key" onclick="pinKey('2')">2</div>
+        <div class="pin-key" onclick="pinKey('3')">3</div>
+        <div class="pin-key" onclick="pinKey('4')">4</div>
+        <div class="pin-key" onclick="pinKey('5')">5</div>
+        <div class="pin-key" onclick="pinKey('6')">6</div>
+        <div class="pin-key" onclick="pinKey('7')">7</div>
+        <div class="pin-key" onclick="pinKey('8')">8</div>
+        <div class="pin-key" onclick="pinKey('9')">9</div>
+        <div class="pin-key" onclick="pinClear()">C</div>
+        <div class="pin-key" onclick="pinKey('0')">0</div>
+        <div class="pin-key" onclick="pinDel()">⌫</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- ACTIONS -->
-  <div class="act-grid">
-    <div class="act-btn" onclick="showModal('sendModal')">
-      <div class="act-icon">📤</div>
-      <div class="act-lbl">Send</div>
+<!-- DASHBOARD SCREEN -->
+<div class="screen" id="screenDash">
+  <div class="dash-wrap">
+
+    <!-- BALANCE CARD -->
+    <div class="bal-card">
+      <div class="bal-label">💰 Your Balance</div>
+      <div class="bal-num" id="balNum">0.00</div>
+      <div class="bal-unit">OTC</div>
+      <div class="bal-addr" id="balAddr"></div>
+      <div class="bal-actions">
+        <div class="bal-btn" onclick="copyAddr()">📋 Copy Address</div>
+        <div class="bal-btn" onclick="loadBal()">🔄 Refresh</div>
+      </div>
     </div>
-    <div class="act-btn" onclick="showModal('receiveModal')">
-      <div class="act-icon">📥</div>
-      <div class="act-lbl">Receive</div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="actions">
+      <div class="act-btn" onclick="showModal('modalSend')">
+        <div class="act-icon">📤</div>
+        <div class="act-label">Send</div>
+      </div>
+      <div class="act-btn" onclick="showModal('modalReceive')">
+        <div class="act-icon">📥</div>
+        <div class="act-label">Receive</div>
+      </div>
+      <div class="act-btn" onclick="loadHistory();showModal('modalHistory')">
+        <div class="act-icon">📋</div>
+        <div class="act-label">History</div>
+      </div>
+      <div class="act-btn" onclick="doLock()">
+        <div class="act-icon">🔒</div>
+        <div class="act-label">Lock</div>
+      </div>
     </div>
-    <div class="act-btn" onclick="toggleHistory()">
-      <div class="act-icon">📋</div>
-      <div class="act-lbl">History</div>
+
+    <!-- NETWORK INFO -->
+    <div class="sec-card">
+      <div class="sec-title">🌐 Network</div>
+      <div class="net-row"><span class="net-key">Network</span><span class="net-val gold">OTCoin Mainnet v2</span></div>
+      <div class="net-row"><span class="net-key">Node</span><span class="net-val">76.13.192.203:6001</span></div>
+      <div class="net-row"><span class="net-key">Block Reward</span><span class="net-val gold">50 OTC / block</span></div>
+      <div class="net-row"><span class="net-key">Max Supply</span><span class="net-val">51,000,000 OTC</span></div>
+      <div class="net-row"><span class="net-key">Status</span><span class="net-val green" id="netStatus">● Checking...</span></div>
+      <div class="net-row"><span class="net-key">Total Blocks</span><span class="net-val" id="netBlocks">—</span></div>
     </div>
-    <div class="act-btn" onclick="doLock()">
-      <div class="act-icon">🔒</div>
-      <div class="act-lbl">Lock</div>
+
+    <!-- MINE INFO -->
+    <div class="sec-card">
+      <div class="sec-title">⛏️ Mine OTC</div>
+      <p style="font-size:13px;color:var(--dim);line-height:1.8;margin-bottom:16px;">Download OTCoin Miner dan earn OTC langsung ke wallet address kamu!</p>
+      <a href="index.html" style="display:block;text-align:center;padding:12px;background:linear-gradient(135deg,var(--g2),var(--g3));color:#000;font-size:11px;font-weight:700;letter-spacing:2px;text-decoration:none;border-radius:8px;">⬇️ Download Miner (Windows)</a>
     </div>
+
   </div>
+</div>
 
-  <!-- HISTORY -->
-  <div class="sec" id="histSec" style="display:none;">
-    <div class="sec-title">📋 Transaction History</div>
-    <div id="histList"><div style="text-align:center;padding:20px;color:var(--dim);font-size:13px;">Loading...</div></div>
+<!-- SEND MODAL -->
+<div class="modal-overlay" id="modalSend">
+  <div class="modal">
+    <div class="modal-title">📤 Kirim OTC <span class="modal-close" onclick="hideModal('modalSend')">×</span></div>
+    <label class="flabel">Alamat Penerima</label>
+    <input class="finput" id="sendTo" placeholder="Masukkan wallet address penerima..." autocomplete="off"/>
+    <label class="flabel">Jumlah OTC <span style="float:right;color:var(--g2);">Tersedia: <span id="sendAvail">0</span> OTC</span></label>
+    <input class="finput" id="sendAmt" type="number" placeholder="0.00" min="0" step="0.001"/>
+    <div style="font-size:11px;color:var(--dim);margin-bottom:14px;">Fee: 0.001 OTC</div>
+    <button class="btn btn-gold" onclick="doSend()">KIRIM SEKARANG</button>
+    <button class="btn btn-outline" style="margin-top:8px;" onclick="hideModal('modalSend')">BATAL</button>
+    <div class="alert" id="sendAlert"></div>
   </div>
+</div>
 
-  <!-- NETWORK -->
-  <div class="sec">
-    <div class="sec-title">🌐 Network</div>
-    <div class="row"><span class="row-k">Network</span><span class="row-v g">OTCoin Mainnet v2</span></div>
-    <div class="row"><span class="row-k">Node</span><span class="row-v">76.13.192.203:6001</span></div>
-    <div class="row"><span class="row-k">Block Reward</span><span class="row-v gold">50 OTC / block</span></div>
-    <div class="row"><span class="row-k">Max Supply</span><span class="row-v">51,000,000 OTC</span></div>
-    <div class="row"><span class="row-k">Min Fee</span><span class="row-v">0.001 OTC</span></div>
+<!-- RECEIVE MODAL -->
+<div class="modal-overlay" id="modalReceive">
+  <div class="modal">
+    <div class="modal-title">📥 Terima OTC <span class="modal-close" onclick="hideModal('modalReceive')">×</span></div>
+    <label class="flabel">Wallet Address Kamu</label>
+    <input class="finput" id="rcvAddrTxt" readonly style="cursor:pointer;" onclick="copyAddr()"/>
+    <div style="font-size:11px;color:var(--dim);margin-bottom:14px;">Klik address untuk copy, atau bagikan ke pengirim.</div>
+    <button class="btn btn-gold" onclick="copyAddr();toast('Address copied!');hideModal('modalReceive')">📋 COPY ADDRESS</button>
+    <button class="btn btn-outline" style="margin-top:8px;" onclick="hideModal('modalReceive')">TUTUP</button>
   </div>
+</div>
 
-  <!-- MINING -->
-  <div class="sec">
-    <div class="sec-title">⛏️ Mine OTC</div>
-    <p style="font-size:13px;color:var(--dim);margin-bottom:14px;line-height:1.8;">Download OTCoin Miner and earn OTC directly to this wallet address!</p>
-    <a href="https://github.com/OTCoinFoundation/OTCoin/releases/download/v1.0.0/OTCoin-Miner.exe" class="btn btn-gold" style="display:block;text-decoration:none;text-align:center;">⬇️ Download Miner (Windows)</a>
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="modalHistory">
+  <div class="modal">
+    <div class="modal-title">📋 History <span class="modal-close" onclick="hideModal('modalHistory')">×</span></div>
+    <div id="histList"><div style="text-align:center;padding:20px;color:var(--dim);">Loading...</div></div>
   </div>
-
-</div>
 </div>
 
-<!-- ═══════════════════════════════
-     SEND MODAL
-═══════════════════════════════ -->
-<div class="modal" id="sendModal">
-<div class="modal-box">
-  <div class="modal-hdr">📤 Send OTC <span class="modal-x" onclick="hideModal('sendModal')">✕</span></div>
-  <label class="flabel">Recipient Address</label>
-  <input id="sendTo" class="finput" placeholder="1abc... OTCoin address">
-  <label class="flabel">Amount (OTC)</label>
-  <input type="number" id="sendAmt" class="finput" placeholder="0.00" step="0.001" min="0.001">
-  <div style="font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.8;">
-    Fee: <strong style="color:var(--g2);">0.001 OTC</strong> &nbsp;|&nbsp;
-    Available: <strong id="sendAvail" style="color:var(--green);">0</strong> OTC
-  </div>
-  <div id="sendAlert" class="alert"></div>
-  <button class="btn btn-gold" onclick="doSend()">📤 Confirm & Send</button>
-  <button class="btn btn-out" onclick="hideModal('sendModal')">Cancel</button>
-</div>
-</div>
-
-<!-- ═══════════════════════════════
-     RECEIVE MODAL
-═══════════════════════════════ -->
-<div class="modal" id="receiveModal">
-<div class="modal-box">
-  <div class="modal-hdr">📥 Receive OTC <span class="modal-x" onclick="hideModal('receiveModal')">✕</span></div>
-  <div class="alert ok" style="display:block;">Share your address below to receive OTC!</div>
-  <label class="flabel">Your OTCoin Address</label>
-  <textarea id="rcvAddrTxt" class="finput" readonly rows="3" style="word-break:break-all;resize:none;"></textarea>
-  <button class="btn btn-gold" onclick="copyEl('rcvAddrTxt');toast('Address copied!')">📋 Copy Address</button>
-  <button class="btn btn-out" onclick="hideModal('receiveModal')">Close</button>
-</div>
-</div>
-
-<div id="toast">✓ Copied!</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ═══════ CRYPTO ═══════
 var ec = new elliptic.ec('secp256k1');
-var myAddr = '', myBal = 0, myPk = null, myPin = '', tmpPk = '', tmpAddr = '';
-var pinEntry = '', pinExpected = '';
 var API = 'https://otcoin.org';
+var myAddr='', myBal=0, myPk=null, myPin='', tmpPk='', tmpAddr='';
+var pinEntry='', pinExpected='';
 
 function h2b(h){var b=[];for(var i=0;i<h.length;i+=2)b.push(parseInt(h.substr(i,2),16));return b;}
 function b2h(b){return b.map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
@@ -358,17 +328,15 @@ function getAddr(pk){
   var kp = ec.keyFromPrivate(pk,'hex');
   var pub = kp.getPublic(false,'hex').slice(2);
   var h1 = sha256.array(h2b(pub));
-  var h2 = sha256.array(h1);
-  return '1' + b2h(h2.slice(0,20));
+  var ripemd = sha256.array(h1); // simplified
+  return '1' + b2h(ripemd.slice(0,20));
 }
 
-// ═══════ SCREENS ═══════
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById(id).classList.add('active');
 }
 
-// ═══════ TABS ═══════
 function switchTab(n){
   document.getElementById('t1').className='tab'+(n===1?' on':'');
   document.getElementById('t2').className='tab'+(n===2?' on':'');
@@ -376,28 +344,26 @@ function switchTab(n){
   document.getElementById('tabCreate').style.display=n===2?'block':'none';
 }
 
-// ═══════ IMPORT ═══════
 function doImport(){
   var pk = document.getElementById('pkImport').value.trim();
   var pin = document.getElementById('pinImport').value.trim();
   setAlert('importAlert','','');
-  if(!pk||pk.length<20){setAlert('importAlert','❌ Enter a valid private key!','err');return;}
+  if(!pk||pk.length<20){setAlert('importAlert','❌ Masukkan private key yang valid!','err');return;}
   try{
     var addr = getAddr(pk);
     openWallet(addr, pk, pin);
-  }catch(e){setAlert('importAlert','❌ Invalid private key format!','err');}
+  }catch(e){setAlert('importAlert','❌ Format private key tidak valid!','err');}
 }
 
-// ═══════ CREATE ═══════
 function doCreate(){
   var kp = ec.genKeyPair();
   var pk = kp.getPrivate('hex').padStart(64,'0');
   var addr = getAddr(pk);
-  tmpPk = pk; tmpAddr = addr;
-  document.getElementById('genAddr').textContent = addr;
-  document.getElementById('genPk').textContent = pk;
-  document.getElementById('genPk').style.filter = 'blur(4px)';
-  document.getElementById('newWalletDiv').style.display = 'block';
+  tmpPk=pk; tmpAddr=addr;
+  document.getElementById('genAddr').textContent=addr;
+  document.getElementById('genPk').textContent=pk;
+  document.getElementById('genPk').classList.add('blur-text');
+  document.getElementById('newWalletDiv').style.display='block';
 }
 
 function doUseNew(){
@@ -405,42 +371,36 @@ function doUseNew(){
   openWallet(tmpAddr, tmpPk, pin);
 }
 
-// ═══════ OPEN WALLET ═══════
 function openWallet(addr, pk, pin){
-  myAddr = addr; myPk = pk; myPin = pin;
+  myAddr=addr; myPk=pk; myPin=pin;
   if(pin){
-    pinExpected = pin;
-    tmpPk = pk; tmpAddr = addr;
+    pinExpected=pin; tmpPk=pk; tmpAddr=addr;
     showScreen('screenPin');
-    pinEntry = '';
-    updatePinDots();
+    pinEntry=''; updatePinDots();
   } else {
     loadDash(addr);
   }
 }
 
 function loadDash(addr){
-  myAddr = addr;
-  document.getElementById('balAddr').textContent = addr;
-  document.getElementById('rcvAddrTxt').value = addr;
-  document.getElementById('sendAvail').textContent = '0';
-  document.getElementById('navAddr').textContent = addr.substring(0,12)+'...';
-  document.getElementById('navAddr').style.display = 'block';
+  myAddr=addr;
+  document.getElementById('balAddr').textContent=addr;
+  document.getElementById('rcvAddrTxt').value=addr;
+  document.getElementById('sendAvail').textContent='0';
+  document.getElementById('navAddr').textContent=addr.substring(0,12)+'...';
+  document.getElementById('navAddr').style.display='block';
   showScreen('screenDash');
   loadBal();
+  loadNetStats();
 }
 
-// ═══════ PIN ═══════
+// PIN
 function pinKey(k){
-  if(pinEntry.length >= 6) return;
-  pinEntry += k;
-  updatePinDots();
-  if(pinEntry.length >= pinExpected.length){
-    if(pinEntry === pinExpected){
-      setTimeout(function(){loadDash(tmpAddr);},200);
-    } else {
-      setTimeout(function(){pinEntry='';updatePinDots();toast('Wrong PIN!');},300);
-    }
+  if(pinEntry.length>=6)return;
+  pinEntry+=k; updatePinDots();
+  if(pinEntry.length>=pinExpected.length){
+    if(pinEntry===pinExpected){setTimeout(function(){loadDash(tmpAddr);},200);}
+    else{setTimeout(function(){pinEntry='';updatePinDots();toast('PIN salah!');},300);}
   }
 }
 function pinDel(){pinEntry=pinEntry.slice(0,-1);updatePinDots();}
@@ -451,69 +411,108 @@ function updatePinDots(){
   }
 }
 
-// ═══════ BALANCE ═══════
+// BALANCE
 function loadBal(){
   document.getElementById('balNum').textContent='...';
   fetch(API+'/api/balance/'+myAddr)
     .then(function(r){return r.json();})
     .then(function(d){
-      myBal = d.balance||0;
-      document.getElementById('balNum').textContent = myBal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:4});
-      document.getElementById('sendAvail').textContent = myBal.toFixed(4);
+      myBal=d.balance||0;
+      document.getElementById('balNum').textContent=myBal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:4});
+      document.getElementById('sendAvail').textContent=myBal.toFixed(4);
     })
-    .catch(function(e){document.getElementById('balNum').textContent='—';});
+    .catch(function(){document.getElementById('balNum').textContent='—';});
 }
 
-// ═══════ SEND ═══════
+// NET STATS
+function loadNetStats(){
+  fetch(API+'/api/stats')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      document.getElementById('netStatus').textContent='● ONLINE';
+      document.getElementById('netStatus').className='net-val green';
+      document.getElementById('netBlocks').textContent=(d.total_blocks||0).toLocaleString();
+    })
+    .catch(function(){
+      document.getElementById('netStatus').textContent='● OFFLINE';
+      document.getElementById('netStatus').className='net-val';
+      document.getElementById('netStatus').style.color='var(--red)';
+    });
+}
+
+// SEND - Menggunakan signature yang kompatibel dengan blockchain
 function doSend(){
   var to = document.getElementById('sendTo').value.trim();
   var amt = parseFloat(document.getElementById('sendAmt').value);
   var fee = 0.001;
   setAlert('sendAlert','','');
-  if(!to||to.length<10){setAlert('sendAlert','❌ Enter recipient address!','err');return;}
-  if(!amt||amt<=0){setAlert('sendAlert','❌ Enter valid amount!','err');return;}
-  if(to===myAddr){setAlert('sendAlert','❌ Cannot send to yourself!','err');return;}
-  if(amt+fee>myBal){setAlert('sendAlert','❌ Insufficient balance!','err');return;}
-  setAlert('sendAlert','⏳ Sending...','ok');
-  var nonce = Math.random().toString(36).substring(2)+Date.now().toString(36);
-  var txStr = myAddr+to+amt+Date.now()+nonce;
-  var msgHash = sha256(txStr);
-  var kp = ec.keyFromPrivate(myPk,'hex');
-  var sig = kp.sign(msgHash).toDER('hex');
-  fetch(API+'/api/transaction',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({sender:myAddr,recipient:to,amount:amt,fee:fee,signature:sig,nonce:nonce,network_id:'otcoin-mainnet-v2'})
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(d.success||d.tx_id){
-      setAlert('sendAlert','✅ Sent '+amt+' OTC to '+to.substring(0,16)+'...','ok');
-      toast('Transaction sent!');
-      document.getElementById('sendTo').value='';
-      document.getElementById('sendAmt').value='';
-      setTimeout(loadBal,3000);
-    } else {
-      setAlert('sendAlert','❌ '+(d.error||'Failed'),'err');
-    }
-  })
-  .catch(function(){
-    setAlert('sendAlert','⏳ Broadcast sent! Pending confirmation...','ok');
-    setTimeout(loadBal,5000);
-  });
-}
-
-// ═══════ HISTORY ═══════
-function toggleHistory(){
-  var sec = document.getElementById('histSec');
-  if(sec.style.display==='none'){
-    sec.style.display='block';
-    loadHistory();
-  } else {
-    sec.style.display='none';
+  
+  if(!to||to.length<10){setAlert('sendAlert','❌ Masukkan alamat penerima!','err');return;}
+  if(!amt||amt<=0){setAlert('sendAlert','❌ Masukkan jumlah yang valid!','err');return;}
+  if(to===myAddr){setAlert('sendAlert','❌ Tidak bisa kirim ke diri sendiri!','err');return;}
+  if(amt+fee>myBal){setAlert('sendAlert','❌ Saldo tidak cukup! (termasuk fee 0.001 OTC)','err');return;}
+  
+  setAlert('sendAlert','⏳ Mengirim transaksi...','ok');
+  
+  try{
+    // Generate nonce unik
+    var nonce = Math.random().toString(36).substring(2,10) + Date.now().toString(36);
+    var timestamp = Date.now() / 1000;
+    var networkId = 'otcoin-mainnet-v2';
+    
+    // Buat string transaksi yang sama dengan Python: sender+recipient+amount+timestamp+nonce
+    var txStr = myAddr + to + amt + timestamp + nonce;
+    var msgHash = sha256(txStr);
+    
+    // Sign dengan private key
+    var kp = ec.keyFromPrivate(myPk, 'hex');
+    var sig = kp.sign(msgHash, {canonical: true});
+    var sigHex = sig.r.toString('hex').padStart(64,'0') + sig.s.toString('hex').padStart(64,'0');
+    
+    // Dapatkan public key
+    var pubKey = kp.getPublic(false,'hex').slice(2);
+    
+    var payload = {
+      sender: myAddr,
+      recipient: to,
+      amount: amt,
+      fee: fee,
+      signature: sigHex,
+      public_key: pubKey,
+      nonce: nonce,
+      timestamp: timestamp,
+      network_id: networkId
+    };
+    
+    fetch(API+'/api/transaction', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success||d.tx_id||d.message){
+        setAlert('sendAlert','✅ Terkirim! '+amt+' OTC → '+to.substring(0,16)+'...','ok');
+        toast('Transaksi berhasil dikirim!');
+        document.getElementById('sendTo').value='';
+        document.getElementById('sendAmt').value='';
+        setTimeout(loadBal, 5000);
+        setTimeout(function(){hideModal('modalSend');},3000);
+      } else {
+        setAlert('sendAlert','❌ '+(d.error||'Gagal kirim transaksi'),'err');
+      }
+    })
+    .catch(function(e){
+      // Kalau fetch error tapi mungkin terkirim
+      setAlert('sendAlert','⚠️ Transaksi dikirim, menunggu konfirmasi...','ok');
+      setTimeout(loadBal, 8000);
+    });
+  }catch(e){
+    setAlert('sendAlert','❌ Error: '+e.message,'err');
   }
 }
 
+// HISTORY
 function loadHistory(){
   document.getElementById('histList').innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);">Loading...</div>';
   fetch(API+'/api/transactions/'+myAddr)
@@ -521,55 +520,66 @@ function loadHistory(){
     .then(function(d){
       var txs = d.transactions||[];
       if(!txs.length){
-        document.getElementById('histList').innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px;">No transactions yet — start mining!</div>';
+        document.getElementById('histList').innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px;">Belum ada transaksi</div>';
         return;
       }
-      var html = txs.map(function(tx){
+      var html = txs.slice(0,30).map(function(tx){
         var isIn = tx.recipient===myAddr;
         var other = isIn?tx.sender:tx.recipient;
-        var label = other==='SYSTEM'?'⛏️ Mining Reward':(isIn?'📥 Received':'📤 Sent');
+        var label = other==='SYSTEM'?'⛏️ Mining Reward':(isIn?'📥 Diterima':'📤 Dikirim');
+        var amtStr = (isIn?'+':'-') + (tx.amount||0).toFixed(4) + ' OTC';
+        var addr = (other&&other!=='SYSTEM') ? other.substring(0,20)+'...' : 'Blockchain Reward';
         return '<div class="tx-item">'+
+          '<span class="tx-icon">'+(other==='SYSTEM'?'⛏️':(isIn?'📥':'📤'))+'</span>'+
           '<div class="tx-info">'+
           '<div class="tx-type">'+label+'</div>'+
-          '<div class="tx-addr">'+(other&&other!=='SYSTEM'?other.substring(0,24)+'...':'')+'</div>'+
+          '<div class="tx-addr">'+addr+'</div>'+
           '</div>'+
-          '<div class="'+(isIn?'tx-amt-in':'tx-amt-out')+'">'+(isIn?'+':'-')+tx.amount.toFixed(4)+' OTC</div>'+
+          '<div class="'+(isIn?'tx-amt-in':'tx-amt-out')+'">'+amtStr+'</div>'+
           '</div>';
       }).join('');
       document.getElementById('histList').innerHTML=html;
     })
     .catch(function(){
-      document.getElementById('histList').innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px;">Could not load history</div>';
+      document.getElementById('histList').innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);">Gagal load history</div>';
     });
 }
 
-// ═══════ LOCK ═══════
+// LOCK
 function doLock(){
   myAddr='';myBal=0;myPk=null;myPin='';pinEntry='';pinExpected='';
   document.getElementById('navAddr').style.display='none';
-  document.getElementById('histSec').style.display='none';
   document.getElementById('pkImport').value='';
   document.getElementById('pinImport').value='';
   showScreen('screenLogin');
-  toast('Wallet locked!');
+  toast('Wallet terkunci!');
 }
 
-// ═══════ HELPERS ═══════
+// HELPERS
 function showModal(id){document.getElementById(id).classList.add('show');}
 function hideModal(id){document.getElementById(id).classList.remove('show');}
 function setAlert(id,msg,type){var el=document.getElementById(id);el.innerHTML=msg;el.className='alert'+(type?' '+type:'');}
-function copyAddr(){navigator.clipboard.writeText(myAddr);toast('Address copied!');}
-function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).value||document.getElementById(id).textContent);}
-function copyText(id){navigator.clipboard.writeText(document.getElementById(id).textContent);toast('Copied!');}
+function copyAddr(){navigator.clipboard.writeText(myAddr);toast('Address disalin!');}
 function toast(msg){
   var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
+  t.textContent=msg;t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2500);
 }
 
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(function(el){
+  el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('show');});
+});
+
 // Auto refresh
-setInterval(function(){if(myAddr)loadBal();},30000);
+setInterval(function(){if(myAddr){loadBal();loadNetStats();}},30000);
+</script>
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){
+  if(e.ctrlKey&&["u","U","s","S","i","I","j","J"].includes(e.key)){e.preventDefault();}
+  if(e.key==="F12"){e.preventDefault();}
+});
 </script>
 </body>
 </html>
