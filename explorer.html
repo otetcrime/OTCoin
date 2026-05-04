@@ -284,9 +284,11 @@ function generateBlocks(count=20){
 }
 
 // ── RENDER ─────────────────────────────────────
+let lastKnownBlocks = 0;
 function renderStats(){
   const pct=(totalMined/TOTAL_SUPPLY*100).toFixed(4);
-  document.getElementById('totalBlocks').textContent=blocks.length.toLocaleString();
+  const totalB = Math.max(blocks.length, lastKnownBlocks);
+  document.getElementById('totalBlocks').textContent=totalB.toLocaleString();
   document.getElementById('totalMined').textContent=totalMined.toLocaleString()+' OTC';
   document.getElementById('totalTxs').textContent=allTxs.length.toLocaleString();
   document.getElementById('supplyFill').style.width=pct+'%';
@@ -302,7 +304,7 @@ function renderBlocks(){
       <tr>
         <td><span class="hash" onclick="showBlock(${b.index})">#${b.index}</span></td>
         <td><span class="hash" onclick="showBlock(${b.index})">${b.hash.slice(0,16)}...</span></td>
-        <td>${b.txs.length}</td>
+        <td>${b.txCount || (b.txs ? b.txs.length : 0)}</td>
         <td><span class="hash">${shortAddr(b.miner)}</span></td>
         <td><span class="badge badge-gold">Ꞵ${b.reward} OTC</span></td>
         <td>${timeAgo(age)}</td>
@@ -475,6 +477,8 @@ function fetchRealData(){
         if(blocks.length > 50) blocks.shift();
       }
       lastBlockIndex = d.latest_index || 0;
+      lastKnownBlocks = d.total_blocks || 0;
+      totalMined = d.total_mined || totalMined;
       fetch(API + '/api/blocks')
         .then(r=>r.json())
         .then(bd=>{
