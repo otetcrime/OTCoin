@@ -441,6 +441,7 @@ function addNewBlock(){
 
 // ── REAL API ──────────────────────────────────
 const API = 'https://otcoin.org';
+const MINER = '11d8bd5b21fad41f3cebf3016c81bc94c3b1a6b20';
 let lastBlockIndex = 0;
 
 function fetchRealData(){
@@ -501,6 +502,24 @@ function fetchRealData(){
       // Fallback ke simulasi kalau API tidak bisa diakses
     });
 
+  // Fetch transactions dari semua blok
+  fetch(API + '/api/blocks')
+    .then(r => r.json())
+    .then(d => {
+      if(d.blocks && d.blocks.length > 0){
+        // Hitung miners dari blok asli
+        const minerStats = {};
+        d.blocks.forEach(b => {
+          if(!minerStats[b.miner]) minerStats[b.miner] = {blocks:0, earned:0};
+          minerStats[b.miner].blocks++;
+          minerStats[b.miner].earned += b.reward;
+        });
+        // Update miners global untuk renderMiners
+        window._realMiners = minerStats;
+      }
+    })
+    .catch(() => {});
+
   // Fetch transactions
   fetch(API + '/api/transactions/' + MINER)
     .then(r => r.json())
@@ -512,7 +531,7 @@ function fetchRealData(){
           recipient: tx.recipient,
           amount: tx.amount,
           type: tx.sender === 'SYSTEM' ? 'COINBASE' : 'TRANSFER',
-          block: tx.block
+          block: tx.block_index || tx.block || 0
         }));
         document.getElementById('totalTxs').textContent = allTxs.length.toLocaleString();
         renderTxs();
