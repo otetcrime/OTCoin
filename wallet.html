@@ -307,9 +307,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,3,10,0.9);backdrop-filte
 
 <!-- HISTORY MODAL -->
 <div class="modal-overlay" id="modalHistory">
-  <div class="modal">
-    <div class="modal-title">📋 History <span class="modal-close" onclick="hideModal('modalHistory')">×</span></div>
-    <div id="histList"><div style="text-align:center;padding:20px;color:var(--dim);">Loading...</div></div>
+  <div class="modal" style="max-height:85vh;display:flex;flex-direction:column;">
+    <div class="modal-title" style="flex-shrink:0;">📋 History <span class="modal-close" onclick="hideModal('modalHistory')">×</span></div>
+    <div id="histList" style="overflow-y:auto;flex:1;max-height:60vh;"><div style="text-align:center;padding:20px;color:var(--dim);">Loading...</div></div>
+    <button class="btn btn-outline" style="margin-top:12px;flex-shrink:0;" onclick="hideModal('modalHistory')">TUTUP</button>
   </div>
 </div>
 
