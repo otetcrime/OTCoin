@@ -474,9 +474,28 @@ function fetchRealData(){
         if(blocks.length > 50) blocks.shift();
       }
       lastBlockIndex = d.latest_index || 0;
-      renderBlocks();
-      renderTxs();
-      renderMiners();
+      fetch(API + '/api/blocks')
+        .then(r=>r.json())
+        .then(bd=>{
+          if(bd.blocks && bd.blocks.length > 0){
+            blocks = bd.blocks.map(b=>({
+              index: b.index,
+              hash: b.hash,
+              prevHash: '...',
+              txs: [],
+              miner: b.miner,
+              reward: b.reward,
+              txCount: b.transactions,
+              nonce: b.nonce,
+              timestamp: b.timestamp,
+              difficulty: b.difficulty
+            }));
+          }
+          renderBlocks();
+          renderTxs();
+          renderMiners();
+        })
+        .catch(()=>{renderBlocks();renderTxs();renderMiners();});
     })
     .catch(() => {
       // Fallback ke simulasi kalau API tidak bisa diakses
@@ -503,11 +522,36 @@ function fetchRealData(){
 }
 
 // ── INIT ──────────────────────────────────────
-generateBlocks(5);
-renderStats();
-renderBlocks();
-renderTxs();
-renderMiners();
+// Load blok asli dari blockchain
+fetch(API + '/api/blocks')
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.blocks && d.blocks.length > 0){
+      blocks = d.blocks.map(b=>({
+        index: b.index,
+        hash: b.hash,
+        prevHash: '...',
+        txs: [],
+        miner: b.miner,
+        reward: b.reward,
+        txCount: b.transactions,
+        nonce: b.nonce,
+        timestamp: b.timestamp,
+        difficulty: b.difficulty
+      }));
+    }
+    renderStats();
+    renderBlocks();
+    renderTxs();
+    renderMiners();
+  })
+  .catch(()=>{
+    generateBlocks(5);
+    renderStats();
+    renderBlocks();
+    renderTxs();
+    renderMiners();
+  });
 
 // Fetch real data
 fetchRealData();
