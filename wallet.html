@@ -349,7 +349,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,3,10,0.9);backdrop-filte
 var ec = new elliptic.ec('secp256k1');
 var myAddr = '', myBal = 0, myPk = null, myPin = '', tmpPk = '', tmpAddr = '';
 var pinEntry = '', pinExpected = '';
-var API = 'http://76.13.192.203:8080';
+var API = 'https://otcoin.org';
 
 function h2b(h){var b=[];for(var i=0;i<h.length;i+=2)b.push(parseInt(h.substr(i,2),16));return b;}
 function b2h(b){return b.map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
